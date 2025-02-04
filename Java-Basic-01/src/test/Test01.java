@@ -13,7 +13,7 @@ public class Test01 {
     Double deeDee = 8.0;
 
     public Test01 () {
-//        number = 10;
+        printVariables();
     }
 
     public int getNumber() {
