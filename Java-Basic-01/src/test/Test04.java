@@ -26,7 +26,7 @@ public class Test04 {
         moreOddNumbers.add(11);
         oddNumbers.addAll(moreOddNumbers);
         System.out.println("add " + oddNumbers);
-        moreOddNumbers.removeFirst();
+        // moreOddNumbers.removeFirst();
         oddNumbers.removeAll(moreOddNumbers);
         System.out.println("rem " + oddNumbers);
         oddNumbers.clear();
