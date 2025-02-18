@@ -1,15 +1,11 @@
 package test;
 
-import test.testing.Testing01;
-
 import java.util.ArrayList;
 
-public class Test06 extends Testing01{
+public class Test06{
 
     public Test06 (){
         System.out.println("Test06 - Classes and Objects");
-
-        System.out.println(pInt);
     }
 
     public class User {
