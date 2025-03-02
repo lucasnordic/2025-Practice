@@ -1,21 +1,32 @@
+name: CI Workflow
+
 on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      WORKING_DIR: ./React-TypeScript/drive-tutorial
+
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v2
 
       - name: Install Dependencies
-        run: npm install -g pnpm && pnpm install
+        run: |
+          npm install -g pnpm
+          pnpm install
+        working-directory: ${{ env.WORKING_DIR }}
 
       - name: Copy .env.example files
         shell: bash
         run: find . -type f -name ".env.example" -exec sh -c 'cp "$1" "${1%.example}"' _ {} \;
+        working-directory: ${{ env.WORKING_DIR }}
 
       - name: Typecheck
         run: pnpm typecheck
+        working-directory: ${{ env.WORKING_DIR }}
 
       - name: Lint
         run: pnpm lint
+        working-directory: ${{ env.WORKING_DIR }}
