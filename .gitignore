@@ -1,32 +1,7 @@
-# Java
-*.class
-hs_err_pid*
-replay_pid*
-
-# Maven
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
-
-# Maven wrapper (keep these)
-!.mvn/wrapper/maven-wrapper.jar
-
-# Gradle
-.gradle/
-**/build/
-!src/**/build/
-gradle-app.setting
-.gradletasknamecache
-
-# Gradle wrapper (keep these)
-!gradle-wrapper.jar
-!gradle-wrapper.properties
+# Logs
+*.log
+log/
+logs/
 
 # IDEs and Editors
 # Eclipse
@@ -59,11 +34,6 @@ out/
 /nbdist/
 /.nb-gradle/
 
-# Logs
-*.log
-log/
-logs/
-
 # OS specific
 .DS_Store
 .DS_Store?
@@ -72,6 +42,3 @@ logs/
 .Trashes
 ehthumbs.db
 Thumbs.db
-
-# Kotlin
-/.kotlin/
