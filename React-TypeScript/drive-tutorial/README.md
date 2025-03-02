@@ -1,6 +1,16 @@
-# Create T3 App
+# Drive Tutorial
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+## TODO
+
+- [ ] Set up database and data model
+- [ ] Move folder open state to URL
+- [ ] Add auth
+- [ ] Add file uploading
+
+
+## Based on:
+
+This is a [T3 Stack](https://create.t3.gg/)
 
 ## What's next? How do I make an app with this?
 
