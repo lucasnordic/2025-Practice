@@ -7,7 +7,6 @@
 - [ ] Add auth
 - [ ] Add file uploading
 
-
 ## Based on:
 
 This is a [T3 Stack](https://create.t3.gg/)

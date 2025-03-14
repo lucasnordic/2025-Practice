@@ -2,16 +2,13 @@
 const config = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: true
+    project: true,
   },
-  plugins: [
-    '@typescript-eslint',
-    'drizzle'
-  ],
+  plugins: ['@typescript-eslint', 'drizzle'],
   extends: [
     'next/core-web-vitals',
     'plugin:@typescript-eslint/recommended-type-checked',
-    'plugin:@typescript-eslint/stylistic-type-checked'
+    'plugin:@typescript-eslint/stylistic-type-checked',
   ],
   rules: {
     '@typescript-eslint/array-type': 'off',
@@ -20,43 +17,37 @@ const config = {
       'warn',
       {
         prefer: 'type-imports',
-        fixStyle: 'inline-type-imports'
-      }
+        fixStyle: 'inline-type-imports',
+      },
     ],
     '@typescript-eslint/no-unused-vars': [
       'warn',
       {
-        argsIgnorePattern: '^_'
-      }
+        argsIgnorePattern: '^_',
+      },
     ],
     '@typescript-eslint/require-await': 'off',
     '@typescript-eslint/no-misused-promises': [
       'error',
       {
         checksVoidReturn: {
-          attributes: false
-        }
-      }
+          attributes: false,
+        },
+      },
     ],
     'drizzle/enforce-delete-with-where': [
       'error',
       {
-        drizzleObjectName: [
-          'db',
-          'ctx.db'
-        ]
-      }
+        drizzleObjectName: ['db', 'ctx.db'],
+      },
     ],
     'drizzle/enforce-update-with-where': [
       'error',
       {
-        drizzleObjectName: [
-          'db',
-          'ctx.db'
-        ]
-      }
-    ]
-  }
-};
+        drizzleObjectName: ['db', 'ctx.db'],
+      },
+    ],
+  },
+}
 
-module.exports = config;
+module.exports = config

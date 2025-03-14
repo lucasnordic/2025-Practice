@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
+import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu'
 import styled from 'styled-components'
 
 // DropdownMenu is the Root component from Radix
@@ -24,28 +24,32 @@ const DropdownMenuContent = styled(DropdownMenuPrimitive.Content)`
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* shadow-md */
 
   /* Animations for opening and closing */
-  &[data-state="open"] {
-    animation: fadeIn 0.3s ease-in-out, zoomIn 0.3s ease-in-out;
+  &[data-state='open'] {
+    animation:
+      fadeIn 0.3s ease-in-out,
+      zoomIn 0.3s ease-in-out;
   }
 
-  &[data-state="closed"] {
-    animation: fadeOut 0.3s ease-in-out, zoomOut 0.3s ease-in-out;
+  &[data-state='closed'] {
+    animation:
+      fadeOut 0.3s ease-in-out,
+      zoomOut 0.3s ease-in-out;
   }
 
   /* Directional Animations */
-  &[data-side="bottom"] {
+  &[data-side='bottom'] {
     animation: slideInFromTop 0.3s ease-in-out;
   }
-  
-  &[data-side="left"] {
+
+  &[data-side='left'] {
     animation: slideInFromRight 0.3s ease-in-out;
   }
 
-  &[data-side="right"] {
+  &[data-side='right'] {
     animation: slideInFromLeft 0.3s ease-in-out;
   }
 
-  &[data-side="top"] {
+  &[data-side='top'] {
     animation: slideInFromBottom 0.3s ease-in-out;
   }
 
@@ -134,12 +138,12 @@ const DropdownMenuItem = styled(DropdownMenuPrimitive.Item)`
   border-radius: 0.25rem; /* rounded-sm */
   outline: none;
   transition: background-color 0.2s ease-in-out;
-  
+
   &:hover {
     background-color: #f0f0f0; /* hover effect */
   }
 
-  &[data-disabled="true"] {
+  &[data-disabled='true'] {
     pointer-events: none;
     opacity: 0.5;
   }

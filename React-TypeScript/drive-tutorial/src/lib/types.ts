@@ -1,17 +1,16 @@
 export interface BaseItem {
   id: string
   name: string
-  type: "file" | "folder"
+  type: 'file' | 'folder'
 }
 
 export interface FileItem extends BaseItem {
-  type: "file"
+  type: 'file'
   modified: string
   size: string
 }
 
 export interface FolderItem extends BaseItem {
-  type: "folder"
+  type: 'folder'
   contents: (FileItem | FolderItem)[]
 }
-
