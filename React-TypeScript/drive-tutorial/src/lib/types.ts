@@ -14,3 +14,5 @@ export interface FolderItem extends BaseItem {
   type: 'folder'
   contents: (FileItem | FolderItem)[]
 }
+
+export type DriveItem = FileItem | FolderItem

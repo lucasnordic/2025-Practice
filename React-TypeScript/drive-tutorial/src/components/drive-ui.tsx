@@ -6,6 +6,7 @@ import Header from '~/components/drive/header'
 import Breadcrumbs from './drive/breadcrumbs'
 import Actions from './drive/actions'
 import FilesFolders from './drive/files-folders'
+import { theme } from '~/lib/theme'
 
 export default function DriveUI() {
   const [currentPath, setCurrentPath] = useState<string[]>([])

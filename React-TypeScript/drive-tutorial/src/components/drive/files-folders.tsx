@@ -2,6 +2,7 @@ import { File, Folder, MoreVertical } from 'lucide-react'
 import { Button } from '~/components/ui/button'
 import { MOCK_DATA } from '~/lib/constants'
 import type { FileItem, FolderItem } from '~/lib/types'
+import { mockFiles } from '~/lib/constants'
 
 type FilesFoldersProps = {
   searchQuery: string

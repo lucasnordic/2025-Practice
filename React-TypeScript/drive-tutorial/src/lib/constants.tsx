@@ -42,7 +42,7 @@ export const VIEW_OPTIONS = [
   },
 ]
 
-export const MOCK_DATA: (FileItem | FolderItem)[] = [
+export const mockFiles: (FileItem | FolderItem)[] = [
   {
     id: 'folder-1',
     name: 'Documents',
@@ -149,3 +149,14 @@ export const MOCK_DATA: (FileItem | FolderItem)[] = [
     size: '1.7 MB',
   },
 ]
+
+// Add more mock data up to 50 entries
+for (let i = 12; i <= 100; i++) {
+  mockFiles.push({
+    id: `file-${i}`,
+    name: `Document_${i}.pdf`,
+    type: 'file',
+    modified: `Apr ${i - 29}, 2024`,
+    size: `${(Math.random() * 4 + 0.5).toFixed(1)} MB`, // Random file size between 0.5MB and 4.5MB
+  })
+}
