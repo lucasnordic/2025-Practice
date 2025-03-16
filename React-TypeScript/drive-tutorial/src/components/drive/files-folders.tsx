@@ -1,14 +1,22 @@
 import { File, Folder, MoreVertical } from 'lucide-react'
 import { Button } from '~/components/ui/button'
-import { MOCK_DATA } from '~/lib/constants'
-import type { FileItem, FolderItem } from '~/lib/types'
 import { mockFiles } from '~/lib/constants'
+import type { DriveItem, FileItem, FolderItem } from '~/lib/types'
+import styled, { css } from 'styled-components'
+import { type ThemeType } from '~/lib/theme'
+
+const ITEMS_PER_PAGE = 10
+
+// Types
+export type ViewType = 'grid' | 'list'
 
 type FilesFoldersProps = {
   searchQuery: string
-  viewType: 'grid' | 'list'
+  viewType: ViewType
   currentPath: string[]
-  setCurrentPath: React.Dispatch<React.SetStateAction<string[]>>
+  setCurrentPath: (path: string[]) => void
+  currentPage: number
+  setCurrentPage: (page: number) => void
 }
 
 export default function FilesFolders({
@@ -16,32 +24,30 @@ export default function FilesFolders({
   setCurrentPath,
   searchQuery,
   viewType,
+  currentPage,
+  setCurrentPage,
 }: FilesFoldersProps) {
+  let currentItems = mockFiles
+
   // Get current folder content based on path
   const getCurrentContent = () => {
-    let current = MOCK_DATA
-
     for (const folder of currentPath) {
-      console.log('Current Path:', currentPath)
-      console.log('Current Content:', current)
-      const foundFolder = current.find(
+      const foundFolder = currentItems.find(
         (item) => item.type === 'folder' && item.name === folder
       ) as FolderItem
       if (foundFolder) {
-        current = foundFolder.contents
+        currentItems = foundFolder.contents
       } else {
         return []
       }
     }
 
     // Filter by search query if present
-    if (searchQuery) {
-      return current.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    }
-
-    return current
+    return searchQuery
+      ? currentItems.filter((item) =>
+          item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : currentItems
   }
 
   const navigateToFolder = (folderName: string) => {
@@ -49,88 +55,215 @@ export default function FilesFolders({
   }
 
   const currentContent = getCurrentContent()
+  const totalPages = Math.ceil(currentContent.length / ITEMS_PER_PAGE)
+  const paginatedContent = currentContent.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  )
 
   return (
     <div className="flex-1 overflow-auto p-4">
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        setCurrentPage={setCurrentPage}
+      />
       {currentContent.length === 0 ? (
-        <div className="flex h-full flex-col items-center justify-center text-muted-foreground">
-          <Folder className="mb-4 h-16 w-16 opacity-20" />
-          <p>This folder is empty</p>
-        </div>
+        <EmptyFolderMessage />
       ) : (
-        <div
-          className={
-            viewType === 'grid'
-              ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
-              : 'space-y-2'
-          }
-        >
-          {currentContent.map((item) => (
-            <div
-              key={item.id}
-              className={`overflow-hidden rounded-lg border transition-colors hover:border-primary ${viewType === 'list' ? 'flex items-center p-2' : ''} `}
-            >
-              {item.type === 'folder' ? (
-                <div
-                  className={`cursor-pointer p-4 ${viewType === 'list' ? 'flex w-full items-center' : ''} `}
-                  onClick={() => navigateToFolder(item.name)}
-                >
-                  <div
-                    className={`${viewType === 'list' ? 'flex w-full items-center gap-4' : 'flex flex-col items-center gap-2'}`}
-                  >
-                    <Folder
-                      className={`${viewType === 'list' ? 'h-5 w-5' : 'h-12 w-12'} text-primary`}
-                    />
-                    <div
-                      className={viewType === 'list' ? 'flex-1' : 'text-center'}
-                    >
-                      <p className="truncate font-medium">{item.name}</p>
-                      {viewType === 'list' && (
-                        <p className="text-xs text-muted-foreground">
-                          {item.contents.length} items
-                        </p>
-                      )}
-                    </div>
-                    {viewType === 'list' && (
-                      <Button variant="ghost" size="icon">
-                        <MoreVertical className="h-4 w-4" />
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <a
-                  href={`#file-${item.id}`}
-                  className={`block p-4 ${viewType === 'list' ? 'flex w-full items-center' : ''} `}
-                >
-                  <div
-                    className={`${viewType === 'list' ? 'flex w-full items-center gap-4' : 'flex flex-col items-center gap-2'}`}
-                  >
-                    <File
-                      className={`${viewType === 'list' ? 'h-5 w-5' : 'h-12 w-12'} text-muted-foreground`}
-                    />
-                    <div
-                      className={viewType === 'list' ? 'flex-1' : 'text-center'}
-                    >
-                      <p className="truncate font-medium">{item.name}</p>
-                      {viewType === 'list' && (
-                        <p className="text-xs text-muted-foreground">
-                          Modified {item.modified}
-                        </p>
-                      )}
-                    </div>
-                    {viewType === 'list' && (
-                      <Button variant="ghost" size="icon">
-                        <MoreVertical className="h-4 w-4" />
-                      </Button>
-                    )}
-                  </div>
-                </a>
-              )}
-            </div>
-          ))}
-        </div>
+        <ContentGrid viewType={viewType}>
+          {paginatedContent.map((item: DriveItem) =>
+            item.type === 'folder' ? (
+              <FolderItem
+                key={item.id}
+                item={item}
+                viewType={viewType}
+                onClick={() => navigateToFolder(item.name)}
+              />
+            ) : (
+              <FileItem key={item.id} item={item} viewType={viewType} />
+            )
+          )}
+        </ContentGrid>
       )}
     </div>
   )
 }
+
+// Reusable Components
+
+const EmptyFolderMessage = () => (
+  <div className="flex h-full flex-col items-center justify-center text-muted-foreground">
+    <Folder className="mb-4 h-16 w-16 opacity-20" />
+    <p>This folder is empty</p>
+  </div>
+)
+
+const Pagination = ({
+  currentPage,
+  totalPages,
+  setCurrentPage,
+}: {
+  currentPage: number
+  totalPages: number
+  setCurrentPage: (page: number) => void
+}) => {
+  const handlePreviousPage = () => {
+    setCurrentPage(currentPage - 1)
+  }
+
+  const handleNextPage = () => {
+    setCurrentPage(currentPage + 1)
+  }
+
+  const renderPagination = () => {
+    let pages = [currentPage - 1, currentPage, currentPage + 1].filter(
+      (page) => page > 0 && page <= totalPages
+    )
+
+    if (currentPage === 1) pages = [1, 2, 3]
+    if (currentPage === totalPages)
+      pages = [totalPages - 2, totalPages - 1, totalPages]
+
+    return pages.filter((page) => page > 0 && page <= totalPages)
+  }
+
+  return (
+    <PaginationContainer>
+      {/* Previous Button */}
+      <PageButton
+        onClick={handlePreviousPage}
+        disabled={currentPage <= 1}
+        aria-label="Go to previous page"
+      >
+        &lt; Previous
+      </PageButton>
+
+      {/* Page Numbers */}
+      {renderPagination().map((page) => (
+        <PageButton
+          key={page}
+          onClick={() => setCurrentPage(page)}
+          active={currentPage === page}
+          aria-label={`Go to page ${page}`}
+        >
+          {page}
+        </PageButton>
+      ))}
+
+      {/* Next Button */}
+      <PageButton
+        onClick={handleNextPage}
+        disabled={currentPage >= totalPages || totalPages === 0}
+        aria-label="Go to next page"
+      >
+        Next &gt;
+      </PageButton>
+    </PaginationContainer>
+  )
+}
+
+// Folder Item Component
+const FolderItem = ({
+  item,
+  viewType,
+  onClick,
+}: {
+  item: FolderItem
+  viewType: ViewType
+  onClick: () => void
+}) => (
+  <ItemContainer viewType={viewType} onClick={onClick}>
+    <Folder className="icon" />
+    <ItemText viewType={viewType}>{item.name}</ItemText>
+  </ItemContainer>
+)
+
+// File Item Component
+const FileItem = ({
+  item,
+  viewType,
+}: {
+  item: FileItem
+  viewType: ViewType
+}) => (
+  <ItemContainer viewType={viewType}>
+    <File className="icon" />
+    <ItemText viewType={viewType}>{item.name}</ItemText>
+  </ItemContainer>
+)
+
+// Styled Components
+const ContentGrid = styled.div<{ viewType: ViewType }>`
+  display: ${(props) => (props.viewType === 'grid' ? 'grid' : 'flex')};
+  grid-template-columns: ${(props) =>
+    props.viewType === 'grid'
+      ? 'repeat(auto-fill, minmax(150px, 1fr))'
+      : 'none'};
+  gap: 1rem;
+  flex-direction: ${(props) =>
+    props.viewType === 'grid' ? 'unset' : 'column'};
+`
+
+const ItemContainer = styled.div<{ viewType: ViewType; theme: ThemeType }>`
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  gap: ${(props) => (props.viewType === 'list' ? '10px' : '5px')};
+
+  &:hover {
+    border-color: ${(props) => props.theme.colors.primary};
+  }
+
+  .icon {
+    width: ${(props) => (props.viewType === 'list' ? '20px' : '40px')};
+    height: ${(props) => (props.viewType === 'list' ? '20px' : '40px')};
+    color: ${({ theme }) => theme.colors.primary};
+  }
+`
+
+const ItemText = styled.p<{ viewType: ViewType }>`
+  font-size: ${(props) => (props.viewType === 'list' ? '14px' : '16px')};
+  text-align: ${(props) => (props.viewType === 'list' ? 'left' : 'center')};
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
+
+const PaginationContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  gap: 8px;
+`
+
+const PageButton = styled.button<{ active?: boolean; theme: ThemeType }>`
+  background: transparent;
+  color: ${({ active, theme }) =>
+    active ? theme.colors.primary : theme.colors.primary};
+  border: ${({ active, theme }) =>
+    active ? `1px solid ${theme.colors.primary}` : 'none'};
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 40px;
+  cursor: pointer;
+  text-align: center;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.hover};
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+`
