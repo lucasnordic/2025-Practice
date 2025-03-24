@@ -5,6 +5,9 @@ export interface BaseItem {
   name: string
   type: 'file' | 'folder'
   parentId: FolderId | null
+  createdAt: Date
+  updatedAt: Date
+  size: number
 }
 
 export interface FileItem extends BaseItem {
