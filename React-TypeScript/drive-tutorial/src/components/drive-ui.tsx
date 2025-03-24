@@ -10,7 +10,7 @@ import { ThemeProvider } from 'styled-components'
 import { theme } from '~/lib/theme'
 
 export default function DriveUI() {
-  const [currentPath, setCurrentPath] = useState<string[]>([])
+  const [currentFolderId, setCurrentFolderId] = useState<string | null>('root')
   const [viewType, setViewType] = useState<ViewType>('list')
   const [searchQuery, setSearchQuery] = useState('')
   const [clicked, setClicked] = useState(false)
@@ -37,16 +37,16 @@ export default function DriveUI() {
           {/* Breadcrumbs and actions */}
           <div className="flex items-center border-b p-4">
             <Breadcrumbs
-              currentPath={currentPath}
-              setCurrentPath={setCurrentPath}
+              currentFolderId={currentFolderId}
+              setCurrentFolderId={setCurrentFolderId}
             />
             <Actions />
           </div>
 
           {/* Files and folders */}
           <FilesFolders
-            currentPath={currentPath}
-            setCurrentPath={setCurrentPath}
+            currentFolderId={currentFolderId}
+            setCurrentFolderId={setCurrentFolderId}
             searchQuery={searchQuery}
             viewType={viewType}
             currentPage={currentPage}
