@@ -6,11 +6,16 @@ import {
 } from '~/server/db/schema'
 
 export default async function Home() {
-  const files = await db.select().from(filesSchema).orderBy(filesSchema.name)
-  const folders = await db
-    .select()
-    .from(foldersSchema)
-    .orderBy(foldersSchema.name)
+  try {
+    const files = await db.select().from(filesSchema).orderBy(filesSchema.name)
+    const folders = await db
+      .select()
+      .from(foldersSchema)
+      .orderBy(foldersSchema.name)
 
-  return <DriveUI files={files} folders={folders} />
+    return <DriveUI files={files} folders={folders} />
+  } catch (error) {
+    console.error('Error loading files and folders from db', error)
+    return <DriveUI files={[]} folders={[]} />
+  }
 }
