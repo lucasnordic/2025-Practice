@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { drizzle } from 'drizzle-orm/singlestore'
 import { createPool, type Pool } from 'mysql2/promise'
 

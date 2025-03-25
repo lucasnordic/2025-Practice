@@ -40,7 +40,7 @@ export default function Header({
   return (
     <HeaderContainer>
       <TitleContainer>
-        <Cloud size={24} color="var(--primary)" />
+        <Cloud size={36} color="hsl(var(--primary))" />
         <h1>My Drive</h1>
       </TitleContainer>
 

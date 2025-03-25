@@ -7,10 +7,17 @@ import Breadcrumbs from './drive/breadcrumbs'
 import Actions from './drive/actions'
 import FilesFolders, { type ViewType } from './drive/files-folders'
 import { ThemeProvider } from 'styled-components'
-import { theme } from '~/lib/theme'
+import { theme } from '~/styles/theme'
+import { ROOT_FOLDER_ID } from '~/utils/drive'
+import type { DbFile, DbFolder } from '~/types/drive-types'
 
-export default function DriveUI() {
-  const [currentFolderId, setCurrentFolderId] = useState<string | null>('root')
+export default function DriveUI(props: {
+  files: DbFile[]
+  folders: DbFolder[]
+}) {
+  const [currentFolderId, setCurrentFolderId] = useState<number | null>(
+    ROOT_FOLDER_ID
+  )
   const [viewType, setViewType] = useState<ViewType>('list')
   const [searchQuery, setSearchQuery] = useState('')
   const [clicked, setClicked] = useState(false)
@@ -35,10 +42,11 @@ export default function DriveUI() {
           />
 
           {/* Breadcrumbs and actions */}
-          <div className="flex items-center border-b p-4">
+          <div className={twStyles.subHeader}>
             <Breadcrumbs
               currentFolderId={currentFolderId}
               setCurrentFolderId={setCurrentFolderId}
+              props={props}
             />
             <Actions />
           </div>
@@ -51,9 +59,14 @@ export default function DriveUI() {
             viewType={viewType}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
+            props={props}
           />
         </div>
       </div>
     </ThemeProvider>
   )
+}
+
+const twStyles = {
+  subHeader: 'flex items-center border-b pl-4 pr-4 pb-4',
 }

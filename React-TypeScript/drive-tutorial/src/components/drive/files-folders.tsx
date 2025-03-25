@@ -1,16 +1,16 @@
 import { File, Folder } from 'lucide-react'
 import styled from 'styled-components'
 
-import { mockDriveItems } from '~/lib/mock-data'
 import type {
-  DriveItem,
   FileItem,
   FolderItem,
-  FolderId,
+  DbFile,
+  DbFolder,
+  DriveItem,
 } from '~/types/drive-types'
-import { type ThemeType } from '~/lib/theme'
+import { type ThemeType } from '~/styles/theme'
 import Pagination from './pagination'
-
+import { useMemo } from 'react'
 const ITEMS_PER_PAGE = 10
 
 /**
@@ -21,10 +21,19 @@ export type ViewType = 'grid' | 'list'
 type FilesFoldersProps = {
   searchQuery: string
   viewType: ViewType
-  currentFolderId: FolderId | null
-  setCurrentFolderId: (id: FolderId | null) => void
+  currentFolderId: number | null
+  setCurrentFolderId: (id: number | null) => void
   currentPage: number
   setCurrentPage: (page: number) => void
+  props: {
+    files: DbFile[]
+    folders: DbFolder[]
+  }
+}
+
+//
+const sortItems = (a: DriveItem, b: DriveItem) => {
+  return a.name.localeCompare(b.name)
 }
 
 /**
@@ -39,25 +48,39 @@ export default function FilesFolders({
   viewType,
   currentPage,
   setCurrentPage,
+  props,
 }: FilesFoldersProps) {
-  const currentItems = mockDriveItems
-
-  // Get current folder content based on parentId
-  const getCurrentContent = () => {
-    let filteredItems = currentItems.filter(
-      (item) => item.parentId === currentFolderId
-    )
-
-    if (searchQuery) {
-      filteredItems = filteredItems.filter((item) => {
-        return item.name.toLowerCase().includes(searchQuery.toLowerCase())
-      })
+  // Combine and filter items
+  const currentContent = useMemo(() => {
+    if (currentFolderId == null || currentFolderId === undefined) {
+      console.error('No folder ID provided')
+      return []
     }
 
-    return filteredItems
-  }
+    const folders = props.folders.map((folder) => ({
+      ...folder,
+      type: 'folder' as const,
+    }))
 
-  const currentContent = getCurrentContent()
+    const files = props.files.map((file) => ({
+      ...file,
+      type: 'file' as const,
+    }))
+
+    const allItems = [...folders, ...files]
+
+    // Filter by parent, search
+    const filteredItems = allItems
+      .filter((item) => item.parentId === currentFolderId)
+      .filter((item) =>
+        searchQuery
+          ? item.name.toLowerCase().includes(searchQuery.toLowerCase())
+          : true
+      )
+
+    return filteredItems
+  }, [props.folders, props.files, currentFolderId, searchQuery])
+
   const totalPages = Math.ceil(currentContent.length / ITEMS_PER_PAGE)
   const paginatedContent = currentContent.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
@@ -75,16 +98,20 @@ export default function FilesFolders({
         <EmptyFolderMessage />
       ) : (
         <ContentGrid viewType={viewType}>
-          {paginatedContent.map((item: DriveItem) =>
+          {paginatedContent.map((item) =>
             item.type === 'folder' ? (
               <FolderItem
-                key={item.id}
+                key={`folder-${item.id}`}
                 folder={item}
                 viewType={viewType}
                 setCurrentFolderId={setCurrentFolderId}
               />
             ) : (
-              <FileItem key={item.id} file={item} viewType={viewType} />
+              <FileItem
+                key={`file-${item.id}`}
+                file={item}
+                viewType={viewType}
+              />
             )
           )}
         </ContentGrid>
@@ -103,17 +130,24 @@ const EmptyFolderMessage = () => (
   </div>
 )
 
-// Folder Item Component
+// Update component prop types
+type FolderItemProps = {
+  folder: DbFolder & { type: 'folder' }
+  viewType: ViewType
+  setCurrentFolderId: (id: number | null) => void
+}
+
+type FileItemProps = {
+  file: DbFile & { type: 'file' }
+  viewType: ViewType
+}
+
 const FolderItem = ({
   folder,
   viewType,
   setCurrentFolderId,
-}: {
-  folder: FolderItem
-  viewType: ViewType
-  setCurrentFolderId: (id: FolderId | null) => void
-}) => {
-  const navigateToFolder = (folderId: FolderId) => {
+}: FolderItemProps) => {
+  const navigateToFolder = (folderId: number) => {
     setCurrentFolderId(folderId)
   }
 
@@ -122,27 +156,20 @@ const FolderItem = ({
       viewType={viewType}
       onClick={() => navigateToFolder(folder.id)}
     >
-      <Folder className="icon" />
+      <Folder className="folder-icon" />
       <ItemText viewType={viewType}>{folder.name}</ItemText>
     </ItemContainer>
   )
 }
 
-// File Item Component
-const FileItem = ({
-  file,
-  viewType,
-}: {
-  file: FileItem
-  viewType: ViewType
-}) => {
+const FileItem = ({ file, viewType }: FileItemProps) => {
   const navigateToFile = (url: string) => {
     window.open(url, '_blank')
   }
 
   return (
     <ItemContainer viewType={viewType} onClick={() => navigateToFile(file.url)}>
-      <File className="icon" />
+      <File className="file-icon" />
       <ItemText viewType={viewType}>{file.name}</ItemText>
     </ItemContainer>
   )
@@ -157,9 +184,11 @@ const ContentGrid = styled.div<{ viewType: ViewType }>`
     props.viewType === 'grid'
       ? 'repeat(auto-fill, minmax(150px, 1fr))'
       : 'none'};
-  gap: 1rem;
+  gap: 0.18rem;
   flex-direction: ${(props) =>
     props.viewType === 'grid' ? 'unset' : 'column'};
+  /* background-color: hsl(var(--background-light)); */
+  border-radius: 8px;
 `
 
 const ItemContainer = styled.div<{ viewType: ViewType; theme: ThemeType }>`
@@ -167,16 +196,23 @@ const ItemContainer = styled.div<{ viewType: ViewType; theme: ThemeType }>`
   align-items: center;
   padding: 10px;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   gap: ${(props) => (props.viewType === 'list' ? '10px' : '5px')};
+  background-color: hsl(var(--background-lighter));
 
   &:hover {
-    border-color: #777777;
+    color: hsl(var(--hover-dark-blue));
   }
 
-  .icon {
+  .folder-icon {
+    width: ${(props) => (props.viewType === 'list' ? '20px' : '40px')};
+    height: ${(props) => (props.viewType === 'list' ? '20px' : '40px')};
+    fill: hsl(var(--accent-light-orange));
+  }
+
+  .file-icon {
     width: ${(props) => (props.viewType === 'list' ? '20px' : '40px')};
     height: ${(props) => (props.viewType === 'list' ? '20px' : '40px')};
   }
@@ -184,7 +220,6 @@ const ItemContainer = styled.div<{ viewType: ViewType; theme: ThemeType }>`
 
 const ItemText = styled.a<{ viewType: ViewType }>`
   font-size: ${(props) => (props.viewType === 'list' ? '14px' : '16px')};
-  text-align: ${(props) => (props.viewType === 'list' ? 'left' : 'center')};
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
