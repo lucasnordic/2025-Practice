@@ -6,12 +6,9 @@ import type {
   FolderItem,
   DbFile,
   DbFolder,
-  DriveItem,
 } from '~/types/drive-types'
 import { type ThemeType } from '~/styles/theme'
-import Pagination from './pagination'
 import { useMemo } from 'react'
-const ITEMS_PER_PAGE = 100
 
 /**
  * Types
@@ -41,8 +38,6 @@ export default function FilesFolders({
   setCurrentFolderId,
   searchQuery,
   viewType,
-  currentPage,
-  setCurrentPage,
   props,
 }: FilesFoldersProps) {
   // Combine and filter items
@@ -76,20 +71,8 @@ export default function FilesFolders({
     return filteredItems
   }, [props.folders, props.files, currentFolderId, searchQuery])
 
-  const totalPages = Math.ceil(currentContent.length / ITEMS_PER_PAGE)
-  const paginatedContent = currentContent.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  )
-
   return (
     <div className="flex-1 overflow-auto p-4">
-      {/* <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        setCurrentPage={setCurrentPage}
-      /> */}
-      {/* show row with "name", "type", "size" and "modified" */}
       {viewType === 'list' && (
         <ItemRow viewType={viewType}>
           <div className=""></div>
@@ -103,7 +86,7 @@ export default function FilesFolders({
         <EmptyFolderMessage />
       ) : (
         <ContentGrid viewType={viewType}>
-          {paginatedContent.map((item) =>
+          {currentContent.map((item) =>
             item.type === 'folder' ? (
               <FolderItem
                 key={`folder-${item.id}`}

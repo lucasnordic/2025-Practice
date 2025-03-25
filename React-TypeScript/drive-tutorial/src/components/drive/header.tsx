@@ -5,7 +5,7 @@ import {
   HoverCardTrigger,
   HoverCardContent,
 } from '@radix-ui/react-hover-card'
-import { Cloud, Grid2X2, List } from 'lucide-react'
+import { Cloud, Grid2X2, List, Moon, Sun } from 'lucide-react'
 import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
 import { VIEW_OPTIONS } from '~/lib/constants'
@@ -21,6 +21,8 @@ interface HeaderProps {
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>
   viewType: 'list' | 'grid'
   setViewType: React.Dispatch<React.SetStateAction<'list' | 'grid'>>
+  darkMode: boolean
+  onToggleDarkMode: () => void
 }
 
 export default function Header({
@@ -30,6 +32,8 @@ export default function Header({
   setSearchQuery,
   viewType,
   setViewType,
+  darkMode,
+  onToggleDarkMode,
 }: HeaderProps) {
   // Debounced Search Input Handling, prevent excessive re-renders when updating search
   const handleSearch = useMemo(
@@ -52,6 +56,9 @@ export default function Header({
           onChange={(e) => handleSearch(e.target.value)}
         />
       </SearchContainer>
+
+      {/* Dark mode toggle */}
+      <DarkModeToggle darkMode={darkMode} onToggleDarkMode={onToggleDarkMode} />
 
       {/* View Toggle Component */}
       <ViewToggle
@@ -111,9 +118,29 @@ export default function Header({
   }
 }
 
+function DarkModeToggle({
+  darkMode,
+  onToggleDarkMode,
+}: {
+  darkMode: boolean
+  onToggleDarkMode: () => void
+}) {
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className="ml-2"
+      onClick={onToggleDarkMode}
+    >
+      {darkMode ? <Sun /> : <Moon />}
+    </Button>
+  )
+}
+
 // Styled Components
 const HeaderContainer = styled.header`
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 4fr 2.5rem 2.5rem;
   align-items: center;
   justify-content: space-between;
   padding: 1rem;

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Header from '~/components/drive/header'
 import Breadcrumbs from './drive/breadcrumbs'
@@ -22,6 +22,28 @@ export default function DriveUI(props: {
   const [searchQuery, setSearchQuery] = useState('')
   const [clicked, setClicked] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
+  const [darkMode, setDarkMode] = useState(true)
+  const [systemDarkMode, setSystemDarkMode] = useState(true)
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', darkMode)
+  }, [darkMode])
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    if (systemDarkMode) {
+      setDarkMode(mediaQuery.matches)
+    }
+
+    const handler = (e: MediaQueryListEvent) => {
+      if (systemDarkMode) {
+        setDarkMode(e.matches)
+      }
+    }
+
+    mediaQuery.addEventListener('change', handler)
+    return () => mediaQuery.removeEventListener('change', handler)
+  }, [systemDarkMode])
 
   return (
     <ThemeProvider theme={theme}>
@@ -39,6 +61,11 @@ export default function DriveUI(props: {
             setSearchQuery={setSearchQuery}
             viewType={viewType}
             setViewType={setViewType}
+            darkMode={darkMode}
+            onToggleDarkMode={() => {
+              setDarkMode(!darkMode)
+              setSystemDarkMode(false)
+            }}
           />
 
           {/* Breadcrumbs and actions */}

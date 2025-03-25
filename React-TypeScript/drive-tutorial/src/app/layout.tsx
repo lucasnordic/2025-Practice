@@ -16,8 +16,21 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable} dark`}>
+    <html lang="en" className={GeistSans.variable}>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                  document.documentElement.classList.add('dark')
+                }
+              } catch (error) {
+                console.error('Error setting dark mode', error)
+              }
+            `,
+          }}
+        />
         {USE_SCAN && (
           <Script
             src="//unpkg.com/react-scan/dist/auto.global.js"
