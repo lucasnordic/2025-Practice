@@ -4,7 +4,7 @@ import { GeistSans } from 'geist/font/sans'
 import { type Metadata } from 'next'
 import Script from 'next/script'
 
-const USE_SCAN = true
+const USE_SCAN = false
 
 export const metadata: Metadata = {
   title: 'Drive App',
@@ -16,7 +16,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable} `}>
+    <html lang="en" className={`${GeistSans.variable} dark`}>
       <head>
         {USE_SCAN && (
           <Script

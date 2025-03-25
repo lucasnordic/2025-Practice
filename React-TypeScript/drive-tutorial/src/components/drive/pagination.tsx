@@ -1,5 +1,5 @@
 import { styled } from 'styled-components'
-import { type ThemeType } from '~/lib/theme'
+import { type ThemeType } from '~/styles/theme'
 
 export default function Pagination({
   currentPage,

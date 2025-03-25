@@ -5,8 +5,9 @@ import type {
   FolderItem,
   FolderId,
 } from '../types/drive-types'
+import type { folders } from '~/server/db/schema'
 
-export const ROOT_FOLDER_ID = 'root'
+export const ROOT_FOLDER_ID = 1 // equal to the id of the root folder in the database
 
 export function isFile(item: DriveItem): item is FileItem {
   return item.type === 'file'
@@ -16,33 +17,30 @@ export function isFolder(item: DriveItem): item is FolderItem {
   return item.type === 'folder'
 }
 
-export function isRootFolder(id: FolderId | null): id is typeof ROOT_FOLDER_ID {
+export const isRootFolder = (id: FolderId): boolean => {
   return id === ROOT_FOLDER_ID
 }
 
-export function getParentFolderId(
-  items: DriveItem[],
-  currentFolderId: FolderId
-): FolderId | null {
-  const currentFolder = items.find((item) => item.id === currentFolderId)
-  return currentFolder?.parentId ?? null
+export const getParentFolderId = (
+  items: (typeof folders.$inferInsert)[],
+  id: FolderId
+): FolderId => {
+  const item = items.find((item) => item.id === id)
+  return item?.parentId ?? ROOT_FOLDER_ID
 }
 
-export function getFolderPath(
-  items: DriveItem[],
-  currentFolderId: FolderId
-): DriveItem[] {
-  const path: DriveItem[] = []
-  let currentId: FolderId | null = currentFolderId
+export const getFolderPath = (
+  items: (typeof folders.$inferInsert)[],
+  targetId: FolderId
+): (typeof folders.$inferInsert)[] => {
+  const path: (typeof folders.$inferInsert)[] = []
+  let currentId: FolderId | null = targetId
 
-  while (currentId && !isRootFolder(currentId)) {
+  while (currentId !== ROOT_FOLDER_ID) {
     const item = items.find((item) => item.id === currentId)
-    if (item) {
-      path.unshift(item)
-      currentId = item.parentId
-    } else {
-      break
-    }
+    if (!item) break
+    path.unshift(item)
+    currentId = item.parentId ?? null
   }
 
   return path
