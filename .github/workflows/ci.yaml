@@ -7,6 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       WORKING_DIR: ./React-TypeScript/drive-tutorial
+      SINGLESTORE_USER: fake
+      SINGLESTORE_PASS: fake
+      SINGLESTORE_HOST: localhost
+      SINGLESTORE_PORT: "3306"
+      SINGLESTORE_DB_NAME: testdb
 
     steps:
       - name: Checkout Code
