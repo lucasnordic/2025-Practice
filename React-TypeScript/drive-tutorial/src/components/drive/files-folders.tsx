@@ -1,57 +1,60 @@
-import { File, Folder, MoreVertical } from 'lucide-react'
-import { Button } from '~/components/ui/button'
-import { mockFiles } from '~/lib/constants'
-import type { DriveItem, FileItem, FolderItem } from '~/lib/types'
-import styled, { css } from 'styled-components'
+import { File, Folder } from 'lucide-react'
+import styled from 'styled-components'
+
+import { mockDriveItems } from '~/lib/mock-data'
+import type {
+  DriveItem,
+  FileItem,
+  FolderItem,
+  FolderId,
+} from '~/types/drive-types'
 import { type ThemeType } from '~/lib/theme'
+import Pagination from './pagination'
 
 const ITEMS_PER_PAGE = 10
 
-// Types
+/**
+ * Types
+ */
 export type ViewType = 'grid' | 'list'
 
 type FilesFoldersProps = {
   searchQuery: string
   viewType: ViewType
-  currentPath: string[]
-  setCurrentPath: (path: string[]) => void
+  currentFolderId: FolderId | null
+  setCurrentFolderId: (id: FolderId | null) => void
   currentPage: number
   setCurrentPage: (page: number) => void
 }
 
+/**
+ * Files and Folders Component
+ * @param param0
+ * @returns
+ */
 export default function FilesFolders({
-  currentPath,
-  setCurrentPath,
+  currentFolderId,
+  setCurrentFolderId,
   searchQuery,
   viewType,
   currentPage,
   setCurrentPage,
 }: FilesFoldersProps) {
-  let currentItems = mockFiles
+  const currentItems = mockDriveItems
 
-  // Get current folder content based on path
+  // Get current folder content based on parentId
   const getCurrentContent = () => {
-    for (const folder of currentPath) {
-      const foundFolder = currentItems.find(
-        (item) => item.type === 'folder' && item.name === folder
-      ) as FolderItem
-      if (foundFolder) {
-        currentItems = foundFolder.contents
-      } else {
-        return []
-      }
+    let filteredItems = currentItems.filter(
+      (item) => item.parentId === currentFolderId
+    )
+
+    if (searchQuery) {
+      filteredItems = filteredItems.filter((item) => {
+        return item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      })
     }
 
-    // Filter by search query if present
-    return searchQuery
-      ? currentItems.filter((item) =>
-          item.name.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      : currentItems
-  }
-
-  const navigateToFolder = (folderName: string) => {
-    setCurrentPath([...currentPath, folderName])
+    return filteredItems
   }
 
   const currentContent = getCurrentContent()
@@ -76,12 +79,12 @@ export default function FilesFolders({
             item.type === 'folder' ? (
               <FolderItem
                 key={item.id}
-                item={item}
+                folder={item}
                 viewType={viewType}
-                onClick={() => navigateToFolder(item.name)}
+                setCurrentFolderId={setCurrentFolderId}
               />
             ) : (
-              <FileItem key={item.id} item={item} viewType={viewType} />
+              <FileItem key={item.id} file={item} viewType={viewType} />
             )
           )}
         </ContentGrid>
@@ -90,8 +93,9 @@ export default function FilesFolders({
   )
 }
 
-// Reusable Components
-
+/**
+ * Reusable Components
+ */
 const EmptyFolderMessage = () => (
   <div className="flex h-full flex-col items-center justify-center text-muted-foreground">
     <Folder className="mb-4 h-16 w-16 opacity-20" />
@@ -99,101 +103,54 @@ const EmptyFolderMessage = () => (
   </div>
 )
 
-const Pagination = ({
-  currentPage,
-  totalPages,
-  setCurrentPage,
+// Folder Item Component
+const FolderItem = ({
+  folder,
+  viewType,
+  setCurrentFolderId,
 }: {
-  currentPage: number
-  totalPages: number
-  setCurrentPage: (page: number) => void
+  folder: FolderItem
+  viewType: ViewType
+  setCurrentFolderId: (id: FolderId | null) => void
 }) => {
-  const handlePreviousPage = () => {
-    setCurrentPage(currentPage - 1)
-  }
-
-  const handleNextPage = () => {
-    setCurrentPage(currentPage + 1)
-  }
-
-  const renderPagination = () => {
-    let pages = [currentPage - 1, currentPage, currentPage + 1].filter(
-      (page) => page > 0 && page <= totalPages
-    )
-
-    if (currentPage === 1) pages = [1, 2, 3]
-    if (currentPage === totalPages)
-      pages = [totalPages - 2, totalPages - 1, totalPages]
-
-    return pages.filter((page) => page > 0 && page <= totalPages)
+  const navigateToFolder = (folderId: FolderId) => {
+    setCurrentFolderId(folderId)
   }
 
   return (
-    <PaginationContainer>
-      {/* Previous Button */}
-      <PageButton
-        onClick={handlePreviousPage}
-        disabled={currentPage <= 1}
-        aria-label="Go to previous page"
-      >
-        &lt; Previous
-      </PageButton>
-
-      {/* Page Numbers */}
-      {renderPagination().map((page) => (
-        <PageButton
-          key={page}
-          onClick={() => setCurrentPage(page)}
-          active={currentPage === page}
-          aria-label={`Go to page ${page}`}
-        >
-          {page}
-        </PageButton>
-      ))}
-
-      {/* Next Button */}
-      <PageButton
-        onClick={handleNextPage}
-        disabled={currentPage >= totalPages || totalPages === 0}
-        aria-label="Go to next page"
-      >
-        Next &gt;
-      </PageButton>
-    </PaginationContainer>
+    <ItemContainer
+      viewType={viewType}
+      onClick={() => navigateToFolder(folder.id)}
+    >
+      <Folder className="icon" />
+      <ItemText viewType={viewType}>{folder.name}</ItemText>
+    </ItemContainer>
   )
 }
 
-// Folder Item Component
-const FolderItem = ({
-  item,
-  viewType,
-  onClick,
-}: {
-  item: FolderItem
-  viewType: ViewType
-  onClick: () => void
-}) => (
-  <ItemContainer viewType={viewType} onClick={onClick}>
-    <Folder className="icon" />
-    <ItemText viewType={viewType}>{item.name}</ItemText>
-  </ItemContainer>
-)
-
 // File Item Component
 const FileItem = ({
-  item,
+  file,
   viewType,
 }: {
-  item: FileItem
+  file: FileItem
   viewType: ViewType
-}) => (
-  <ItemContainer viewType={viewType}>
-    <File className="icon" />
-    <ItemText viewType={viewType}>{item.name}</ItemText>
-  </ItemContainer>
-)
+}) => {
+  const navigateToFile = (url: string) => {
+    window.open(url, '_blank')
+  }
 
-// Styled Components
+  return (
+    <ItemContainer viewType={viewType} onClick={() => navigateToFile(file.url)}>
+      <File className="icon" />
+      <ItemText viewType={viewType}>{file.name}</ItemText>
+    </ItemContainer>
+  )
+}
+
+/*
+ * Styled Components
+ */
 const ContentGrid = styled.div<{ viewType: ViewType }>`
   display: ${(props) => (props.viewType === 'grid' ? 'grid' : 'flex')};
   grid-template-columns: ${(props) =>
@@ -216,54 +173,20 @@ const ItemContainer = styled.div<{ viewType: ViewType; theme: ThemeType }>`
   gap: ${(props) => (props.viewType === 'list' ? '10px' : '5px')};
 
   &:hover {
-    border-color: ${(props) => props.theme.colors.primary};
+    border-color: #777777;
   }
 
   .icon {
     width: ${(props) => (props.viewType === 'list' ? '20px' : '40px')};
     height: ${(props) => (props.viewType === 'list' ? '20px' : '40px')};
-    color: ${({ theme }) => theme.colors.primary};
   }
 `
 
-const ItemText = styled.p<{ viewType: ViewType }>`
+const ItemText = styled.a<{ viewType: ViewType }>`
   font-size: ${(props) => (props.viewType === 'list' ? '14px' : '16px')};
   text-align: ${(props) => (props.viewType === 'list' ? 'left' : 'center')};
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-`
-
-const PaginationContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  gap: 8px;
-`
-
-const PageButton = styled.button<{ active?: boolean; theme: ThemeType }>`
-  background: transparent;
-  color: ${({ active, theme }) =>
-    active ? theme.colors.primary : theme.colors.primary};
-  border: ${({ active, theme }) =>
-    active ? `1px solid ${theme.colors.primary}` : 'none'};
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 14px;
-  font-weight: 500;
-  min-width: 40px;
-  cursor: pointer;
-  text-align: center;
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.hover};
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
 `

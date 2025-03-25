@@ -36,6 +36,10 @@ yarn-error.log*
 .env
 .env*.local
 
+# local files and folders
+personal_notes/
+sandbox-for-development/
+
 # vercel
 .vercel
 
