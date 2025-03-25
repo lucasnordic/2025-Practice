@@ -17,20 +17,24 @@ export default function Actions() {
     <div className="ml-auto flex items-center gap-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="gap-2" id="new-dropdown-trigger">
+          <Button
+            variant="outline"
+            className={twStyles.button}
+            id="new-dropdown-trigger"
+          >
             <Plus className="h-4 w-4" />
             New
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="w-36 rounded-md bg-white p-2 shadow-md"
+          className={twStyles.dropdownMenuContent}
         >
-          <DropdownMenuItem className="flex w-full items-center gap-2 rounded-md px-2 py-1 text-sm hover:bg-gray-100">
+          <DropdownMenuItem className={twStyles.dropdownMenuItem}>
             <Folder className="mr-2 h-4 w-4" />
             New Folder
           </DropdownMenuItem>
-          <DropdownMenuItem className="flex w-full items-center gap-2 rounded-md px-2 py-1 text-sm hover:bg-gray-100">
+          <DropdownMenuItem className={twStyles.dropdownMenuItem}>
             <File className="mr-2 h-4 w-4" />
             New Doc
           </DropdownMenuItem>
@@ -43,4 +47,11 @@ export default function Actions() {
       </Button>
     </div>
   )
+}
+
+const twStyles = {
+  button: 'gap-2',
+  dropdownMenuContent: 'w-36 rounded-md bg-white p-2 shadow-md',
+  dropdownMenuItem:
+    'flex w-full items-center gap-2 rounded-md px-2 py-1 text-sm hover:bg-gray-100',
 }
