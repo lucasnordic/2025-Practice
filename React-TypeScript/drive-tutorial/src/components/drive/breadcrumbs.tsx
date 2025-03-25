@@ -22,7 +22,7 @@ export default function Breadcrumbs({
   const breadcrumbs = useMemo(() => {
     const base = [{ id: ROOT_FOLDER_ID, name: 'My Drive' }]
     if (!currentFolderId || isRootFolder(currentFolderId)) {
-      return base
+      return []
     }
 
     const path = getFolderPath(props.folders, currentFolderId)

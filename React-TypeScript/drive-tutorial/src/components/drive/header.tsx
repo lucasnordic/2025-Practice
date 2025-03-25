@@ -132,6 +132,7 @@ const SearchContainer = styled.div`
   display: flex;
   justify-content: center;
   margin: 0 1rem;
+  max-width: 600px;
 `
 
 const ViewToggleContainer = styled.div`
@@ -144,7 +145,7 @@ const ViewToggleContainer = styled.div`
 const HoverCardStyled = styled(HoverCardContent)`
   width: 9rem;
   border-radius: 0.375rem;
-  background: var(--background);
+  background: hsl(var(--background-lighter));
   padding: 0.5rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 `
@@ -163,6 +164,6 @@ const ViewToggleButton = styled.button`
   transition: background 0.2s;
 
   &:hover {
-    background: var(--muted);
+    background: hsl(var(--secondary));
   }
 `

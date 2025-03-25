@@ -6,6 +6,7 @@ import {
 } from '~/components/ui/dropdown-menu'
 import { File, Folder, Upload, Plus } from 'lucide-react'
 import { Button } from '~/components/ui/button'
+import { styled } from 'styled-components'
 
 export default function Actions() {
   const handleUpload = () => {
@@ -18,7 +19,7 @@ export default function Actions() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="outline"
+            variant="secondary"
             className={twStyles.button}
             id="new-dropdown-trigger"
           >
@@ -26,22 +27,22 @@ export default function Actions() {
             New
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent
+        <DropDownMenuContentStyled
           align="end"
           className={twStyles.dropdownMenuContent}
         >
-          <DropdownMenuItem className={twStyles.dropdownMenuItem}>
+          <DropDownMenuItemStyled className={twStyles.dropdownMenuItem}>
             <Folder className="mr-2 h-4 w-4" />
             New Folder
-          </DropdownMenuItem>
-          <DropdownMenuItem className={twStyles.dropdownMenuItem}>
+          </DropDownMenuItemStyled>
+          <DropDownMenuItemStyled className={twStyles.dropdownMenuItem}>
             <File className="mr-2 h-4 w-4" />
             New Doc
-          </DropdownMenuItem>
-        </DropdownMenuContent>
+          </DropDownMenuItemStyled>
+        </DropDownMenuContentStyled>
       </DropdownMenu>
 
-      <Button onClick={handleUpload} className="gap-2">
+      <Button variant="default" onClick={handleUpload} className="gap-2">
         <Upload className="h-4 w-4" />
         Upload
       </Button>
@@ -51,7 +52,19 @@ export default function Actions() {
 
 const twStyles = {
   button: 'gap-2',
-  dropdownMenuContent: 'w-36 rounded-md bg-white p-2 shadow-md',
+  dropdownMenuContent: 'w-36 rounded-md p-2 shadow-md',
   dropdownMenuItem:
-    'flex w-full items-center gap-2 rounded-md px-2 py-1 text-sm hover:bg-gray-100',
+    'flex w-full items-center gap-2 rounded-md px-2 py-1 text-sm',
 }
+
+const DropDownMenuContentStyled = styled(DropdownMenuContent)`
+  background: hsl(var(--background-lighter));
+  color: hsl(var(--foreground));
+  border: 0px;
+`
+
+const DropDownMenuItemStyled = styled(DropdownMenuItem)`
+  &:hover {
+    background: hsl(var(--secondary));
+  }
+`

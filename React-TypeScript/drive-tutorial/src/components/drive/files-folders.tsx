@@ -89,6 +89,16 @@ export default function FilesFolders({
         totalPages={totalPages}
         setCurrentPage={setCurrentPage}
       /> */}
+      {/* show row with "name", "type", "size" and "modified" */}
+      {viewType === 'list' && (
+        <ItemRow viewType={viewType}>
+          <div className=""></div>
+          <div className="">Name</div>
+          <div className="">Type</div>
+          <div className="">Size</div>
+          <div className="">Modified</div>
+        </ItemRow>
+      )}
       {currentContent.length === 0 ? (
         <EmptyFolderMessage />
       ) : (
@@ -153,6 +163,15 @@ const FolderItem = ({
     >
       <Folder className="folder-icon" />
       <ItemText viewType={viewType}>{folder.name}</ItemText>
+      {viewType === 'list' && (
+        <>
+          <ItemText viewType={viewType}>{folder.type}</ItemText>
+          <ItemText viewType={viewType}>{folder.size}</ItemText>
+          <ItemText viewType={viewType}>
+            {folder.updatedAt?.toLocaleDateString()}
+          </ItemText>
+        </>
+      )}
     </ItemContainer>
   )
 }
@@ -166,6 +185,15 @@ const FileItem = ({ file, viewType }: FileItemProps) => {
     <ItemContainer viewType={viewType} onClick={() => navigateToFile(file.url)}>
       <File className="file-icon" />
       <ItemText viewType={viewType}>{file.name}</ItemText>
+      {viewType === 'list' && (
+        <>
+          <ItemText viewType={viewType}>{file.type}</ItemText>
+          <ItemText viewType={viewType}>{file.size}</ItemText>
+          <ItemText viewType={viewType}>
+            {file.updatedAt?.toLocaleDateString()}
+          </ItemText>
+        </>
+      )}
     </ItemContainer>
   )
 }
@@ -177,7 +205,7 @@ const ContentGrid = styled.div<{ viewType: ViewType }>`
   display: ${(props) => (props.viewType === 'grid' ? 'grid' : 'flex')};
   grid-template-columns: ${(props) =>
     props.viewType === 'grid'
-      ? 'repeat(auto-fill, minmax(150px, 1fr))'
+      ? 'repeat(auto-fill, minmax(200px, 1fr))'
       : 'none'};
   gap: 0.18rem;
   flex-direction: ${(props) =>
@@ -187,15 +215,22 @@ const ContentGrid = styled.div<{ viewType: ViewType }>`
 `
 
 const ItemContainer = styled.div<{ viewType: ViewType; theme: ThemeType }>`
-  display: flex;
-  align-items: center;
+  display: ${(props) => (props.viewType === 'list' ? 'grid' : 'flex')};
+  gap: ${(props) => (props.viewType === 'list' ? '10px' : '5px')};
+  ${(props) =>
+    props.viewType === 'list' &&
+    `
+    justify-content: space-between;
+    text-align: left;
+    grid-template-columns: auto 1fr repeat(3, 0.5fr);
+  `}
   padding: 10px;
   border: 1px solid transparent;
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  gap: ${(props) => (props.viewType === 'list' ? '10px' : '5px')};
   background-color: hsl(var(--background-lighter));
+  align-items: center;
 
   &:hover {
     color: hsl(var(--hover-dark-blue));
@@ -214,9 +249,15 @@ const ItemContainer = styled.div<{ viewType: ViewType; theme: ThemeType }>`
   }
 `
 
+const ItemRow = styled.div<{ viewType: ViewType }>`
+  display: grid;
+  grid-template-columns: 20px 1fr repeat(3, 0.5fr);
+  padding: 10px;
+  gap: 10px;
+`
+
 const ItemText = styled.a<{ viewType: ViewType }>`
-  font-size: ${(props) => (props.viewType === 'list' ? '14px' : '16px')};
-  width: 100%;
+  font-size: ${(props) => (props.viewType === 'list' ? '14px' : '14px')};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

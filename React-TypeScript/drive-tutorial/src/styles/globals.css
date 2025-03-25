@@ -58,14 +58,20 @@
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
+    --border: 200 13% 34.9%;
+    --input: 200 13% 34.9%;
     --ring: 0 0% 83.1%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --radius: 0.5rem;
+    --accent-light-green: 120 100% 80%;
+    --accent-light-green-border: 120 100% 60%;
+    --accent-light-orange: 30 100% 80%;
+    --accent-light-orange-border: 30 100% 60%;
+    --hover-dark-blue: 200 60% 60%;
   }
 }
 
