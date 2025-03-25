@@ -11,7 +11,7 @@ import type {
 import { type ThemeType } from '~/styles/theme'
 import Pagination from './pagination'
 import { useMemo } from 'react'
-const ITEMS_PER_PAGE = 10
+const ITEMS_PER_PAGE = 100
 
 /**
  * Types
@@ -29,11 +29,6 @@ type FilesFoldersProps = {
     files: DbFile[]
     folders: DbFolder[]
   }
-}
-
-//
-const sortItems = (a: DriveItem, b: DriveItem) => {
-  return a.name.localeCompare(b.name)
 }
 
 /**
@@ -89,11 +84,11 @@ export default function FilesFolders({
 
   return (
     <div className="flex-1 overflow-auto p-4">
-      <Pagination
+      {/* <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         setCurrentPage={setCurrentPage}
-      />
+      /> */}
       {currentContent.length === 0 ? (
         <EmptyFolderMessage />
       ) : (
@@ -210,6 +205,7 @@ const ItemContainer = styled.div<{ viewType: ViewType; theme: ThemeType }>`
     width: ${(props) => (props.viewType === 'list' ? '20px' : '40px')};
     height: ${(props) => (props.viewType === 'list' ? '20px' : '40px')};
     fill: hsl(var(--accent-light-orange));
+    color: hsl(var(--accent-light-orange));
   }
 
   .file-icon {
