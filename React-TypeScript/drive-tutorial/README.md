@@ -2,10 +2,21 @@
 
 ## TODO
 
-- [ ] Set up database and data model
+- [x] Set up database and data model
 - [ ] Move folder open state to URL
 - [ ] Add auth
 - [ ] Add file uploading
+
+## EXTRA
+
+- [ ] url navigation
+- [ ] search is not specific to current folder
+- [ ] Hamburger menu / media query for extra buttons, darkmode, grid/list, new/upload
+- [ ] In breadcrumbs, display the deepest folder first, add '...' between My Drive and however many fits to the right
+- [ ] Redo light mode styling
+- [ ] handle infinite scrolling - limit
+- [ ] Refactor repeatable logic into hooks or services
+- [ ] Create drive-ui context
 
 ## Based on:
 
