@@ -72,9 +72,9 @@ export default function FilesFolders({
   }, [props.folders, props.files, currentFolderId, searchQuery])
 
   return (
-    <div className="flex-1 overflow-auto p-4">
+    <div className="flex-1 overflow-auto pb-4 pl-4 pr-4 pt-2">
       {viewType === 'list' && (
-        <ItemRow viewType={viewType}>
+        <ItemRow>
           <div className=""></div>
           <div className="">Name</div>
           <div className="">Type</div>
@@ -232,7 +232,7 @@ const ItemContainer = styled.div<{ viewType: ViewType; theme: ThemeType }>`
   }
 `
 
-const ItemRow = styled.div<{ viewType: ViewType }>`
+const ItemRow = styled.div`
   display: grid;
   grid-template-columns: 20px 1fr repeat(3, 0.5fr);
   padding: 10px;
