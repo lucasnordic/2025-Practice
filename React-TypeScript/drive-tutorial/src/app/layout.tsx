@@ -1,7 +1,7 @@
 import '~/styles/globals.css'
 
 import { GeistSans } from 'geist/font/sans'
-import { type Metadata } from 'next'
+import type { Metadata } from 'next/dist/lib/metadata/types/metadata-interface'
 import Script from 'next/script'
 
 const USE_SCAN = false
