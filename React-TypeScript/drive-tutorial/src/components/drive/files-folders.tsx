@@ -145,12 +145,12 @@ const FolderItem = ({
       onClick={() => navigateToFolder(folder.id)}
     >
       <Folder className="folder-icon" />
-      <ItemText viewType={viewType}>{folder.name}</ItemText>
+      <ItemText $viewType={viewType}>{folder.name}</ItemText>
       {viewType === 'list' && (
         <>
-          <ItemText viewType={viewType}>{folder.type}</ItemText>
-          <ItemText viewType={viewType}>{folder.size}</ItemText>
-          <ItemText viewType={viewType}>
+          <ItemText $viewType={viewType}>{folder.type}</ItemText>
+          <ItemText $viewType={viewType}>{folder.size}</ItemText>
+          <ItemText $viewType={viewType}>
             {folder.updatedAt?.toLocaleDateString()}
           </ItemText>
         </>
@@ -167,12 +167,12 @@ const FileItem = ({ file, viewType }: FileItemProps) => {
   return (
     <ItemContainer viewType={viewType} onClick={() => navigateToFile(file.url)}>
       <File className="file-icon" />
-      <ItemText viewType={viewType}>{file.name}</ItemText>
+      <ItemText $viewType={viewType}>{file.name}</ItemText>
       {viewType === 'list' && (
         <>
-          <ItemText viewType={viewType}>{file.type}</ItemText>
-          <ItemText viewType={viewType}>{file.size}</ItemText>
-          <ItemText viewType={viewType}>
+          <ItemText $viewType={viewType}>{file.type}</ItemText>
+          <ItemText $viewType={viewType}>{file.size}</ItemText>
+          <ItemText $viewType={viewType}>
             {file.updatedAt?.toLocaleDateString()}
           </ItemText>
         </>
@@ -239,8 +239,8 @@ const ItemRow = styled.div`
   gap: 10px;
 `
 
-const ItemText = styled.a<{ viewType: ViewType }>`
-  font-size: ${(props) => (props.viewType === 'list' ? '14px' : '14px')};
+const ItemText = styled.a<{ $viewType: ViewType }>`
+  font-size: ${(props) => (props.$viewType === 'list' ? '14px' : '14px')};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
