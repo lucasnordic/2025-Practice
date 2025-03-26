@@ -15,7 +15,7 @@ export default function Actions() {
   }
 
   return (
-    <div className="ml-auto flex items-center gap-2">
+    <div className={twStyles.container}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -42,7 +42,11 @@ export default function Actions() {
         </DropDownMenuContentStyled>
       </DropdownMenu>
 
-      <Button variant="default" onClick={handleUpload} className="gap-2">
+      <Button
+        variant="default"
+        onClick={handleUpload}
+        className={twStyles.button}
+      >
         <Upload className="h-4 w-4" />
         Upload
       </Button>
@@ -51,7 +55,8 @@ export default function Actions() {
 }
 
 const twStyles = {
-  button: 'gap-2',
+  container: 'ml-auto flex items-center gap-2',
+  button: 'gap-2 w-28',
   dropdownMenuContent: 'w-36 rounded-md p-2 shadow-md',
   dropdownMenuItem:
     'flex w-full items-center gap-2 rounded-md px-2 py-1 text-sm',

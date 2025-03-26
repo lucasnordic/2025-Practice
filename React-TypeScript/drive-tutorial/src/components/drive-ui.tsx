@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 
 import Header from '~/components/drive/header'
 import Breadcrumbs from './drive/breadcrumbs'
-import Actions from './drive/actions'
 import FilesFolders, { type ViewType } from './drive/files-folders'
 import { ThemeProvider } from 'styled-components'
 import { theme } from '~/styles/theme'
@@ -75,7 +74,6 @@ export default function DriveUI(props: {
               setCurrentFolderId={setCurrentFolderId}
               props={props}
             />
-            <Actions />
           </div>
 
           {/* Files and folders */}
@@ -95,5 +93,5 @@ export default function DriveUI(props: {
 }
 
 const twStyles = {
-  subHeader: 'flex items-center border-b pl-4 pr-4 pb-4',
+  subHeader: 'flex items-center pl-4 pr-4 pb-1 border-b-2',
 }

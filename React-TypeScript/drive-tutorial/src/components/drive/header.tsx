@@ -12,7 +12,7 @@ import { VIEW_OPTIONS } from '~/lib/constants'
 import styled from 'styled-components'
 import { useMemo } from 'react'
 import { debounce } from 'lodash'
-
+import Actions from './actions'
 // Types
 interface HeaderProps {
   clicked: boolean
@@ -44,8 +44,12 @@ export default function Header({
   return (
     <HeaderContainer>
       <TitleContainer>
-        <Cloud size={36} color="hsl(var(--primary))" />
-        <h1>My Drive</h1>
+        {/* fill with white */}
+        <Cloud
+          size={36}
+          color="hsl(var(--primary))"
+          fill="hsl(var(--primary))"
+        />
       </TitleContainer>
 
       {/* Search Bar */}
@@ -57,16 +61,24 @@ export default function Header({
         />
       </SearchContainer>
 
-      {/* Dark mode toggle */}
-      <DarkModeToggle darkMode={darkMode} onToggleDarkMode={onToggleDarkMode} />
+      <div className={twStyles.container}>
+        {/* Dark mode toggle */}
+        <DarkModeToggle
+          darkMode={darkMode}
+          onToggleDarkMode={onToggleDarkMode}
+        />
 
-      {/* View Toggle Component */}
-      <ViewToggle
-        viewType={viewType}
-        setViewType={setViewType}
-        clicked={clicked}
-        setClicked={setClicked}
-      />
+        {/* View Toggle Component */}
+        <ViewToggle
+          viewType={viewType}
+          setViewType={setViewType}
+          clicked={clicked}
+          setClicked={setClicked}
+        />
+
+        {/* Actions */}
+        <Actions />
+      </div>
     </HeaderContainer>
   )
 
@@ -83,7 +95,8 @@ export default function Header({
     setClicked: React.Dispatch<React.SetStateAction<boolean>>
   }) {
     return (
-      <ViewToggleContainer
+      <div
+        className={twStyles.viewToggleContainer}
         onMouseLeave={() => setTimeout(() => setClicked(false), 300)}
       >
         <HoverCard>
@@ -113,7 +126,7 @@ export default function Header({
             </HoverCardStyled>
           )}
         </HoverCard>
-      </ViewToggleContainer>
+      </div>
     )
   }
 }
@@ -129,8 +142,8 @@ function DarkModeToggle({
     <Button
       variant="ghost"
       size="icon"
-      className="ml-2"
       onClick={onToggleDarkMode}
+      className={twStyles.darkModeToggleContainer}
     >
       {darkMode ? <Sun /> : <Moon />}
     </Button>
@@ -138,9 +151,15 @@ function DarkModeToggle({
 }
 
 // Styled Components
+const twStyles = {
+  container: 'flex gap-2',
+  viewToggleContainer: 'flex gap-2 ml-auto',
+  darkModeToggleContainer: 'p-3 ml-auto',
+}
+
 const HeaderContainer = styled.header`
   display: grid;
-  grid-template-columns: auto 4fr 2.5rem 2.5rem;
+  grid-template-columns: auto 4fr 2.5rem 2.5rem 7.5rem 7.5rem;
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
@@ -159,14 +178,7 @@ const SearchContainer = styled.div`
   display: flex;
   justify-content: center;
   margin: 0 1rem;
-  max-width: 600px;
-`
-
-const ViewToggleContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-left: auto;
+  max-width: 100%;
 `
 
 const HoverCardStyled = styled(HoverCardContent)`
