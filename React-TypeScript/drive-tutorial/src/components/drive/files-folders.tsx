@@ -59,16 +59,11 @@ export default function FilesFolders({
 
     const allItems = [...folders, ...files]
 
-    // Filter by parent, search
-    const filteredItems = allItems
-      .filter((item) => item.parentId === currentFolderId)
-      .filter((item) =>
-        searchQuery
-          ? item.name.toLowerCase().includes(searchQuery.toLowerCase())
-          : true
-      )
-
-    return filteredItems
+    return allItems.filter((item) =>
+      searchQuery
+        ? item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        : true
+    )
   }, [props.folders, props.files, currentFolderId, searchQuery])
 
   return (
