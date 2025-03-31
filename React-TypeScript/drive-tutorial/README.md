@@ -3,12 +3,16 @@
 ## TODO
 
 - [x] Set up database and data model
-- [ ] Move folder open state to URL
+- [x] Move folder open state to URL
 - [ ] Add auth
 - [ ] Add file uploading
+- [ ] Analytics
 
 ## EXTRA
 
+- [ ] change folders to link components
+- [ ] clean up the db and data fetching patterns
+- [ ] real homepage
 - [ ] url navigation
 - [ ] search is not specific to current folder
 - [ ] Hamburger menu / media query for extra buttons, darkmode, grid/list, new/upload
