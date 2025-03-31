@@ -5,12 +5,14 @@ import {
   folders as foldersSchema,
 } from '~/server/db/schema'
 import { eq } from 'drizzle-orm'
+import { cache } from 'react'
 
 export default async function DriveItemPage(props: {
   params: Promise<{ folderId: string }>
 }) {
   const params = await props.params
   const parsedFolderId = parseInt(params.folderId)
+
   if (isNaN(parsedFolderId) || parsedFolderId <= 0) {
     return (
       <div className="flex h-full w-full items-center justify-center p-4">
@@ -20,17 +22,23 @@ export default async function DriveItemPage(props: {
   }
 
   try {
-    const files = await db
-      .select()
-      .from(filesSchema)
-      .where(eq(filesSchema.parentId, parsedFolderId))
-      .orderBy(filesSchema.name)
+    const getFiles = cache(async (folderId: number) => {
+      return await db
+        .select()
+        .from(filesSchema)
+        .where(eq(filesSchema.parentId, folderId))
+        .orderBy(filesSchema.name)
+    })
+    const files = await getFiles(parsedFolderId)
 
-    const folders = await db
-      .select()
-      .from(foldersSchema)
-      .where(eq(foldersSchema.parentId, parsedFolderId))
-      .orderBy(foldersSchema.name)
+    const getFolders = cache(async (folderId: number) => {
+      return await db
+        .select()
+        .from(foldersSchema)
+        .where(eq(foldersSchema.parentId, folderId))
+        .orderBy(foldersSchema.name)
+    })
+    const folders = await getFolders(parsedFolderId)
 
     return <DriveUI files={files} folders={folders} />
   } catch (error) {

@@ -9,6 +9,7 @@ import type {
 } from '~/types/drive-types'
 import { type ThemeType } from '~/styles/theme'
 import { useMemo } from 'react'
+import Link from 'next/link'
 
 /**
  * Types
@@ -130,49 +131,42 @@ const FolderItem = ({
   viewType,
   setCurrentFolderId,
 }: FolderItemProps) => {
-  const navigateToFolder = (folderId: number) => {
-    setCurrentFolderId(folderId)
-  }
-
   return (
-    <ItemContainer
-      viewType={viewType}
-      onClick={() => navigateToFolder(folder.id)}
-    >
-      <Folder className="folder-icon" />
-      <ItemText $viewType={viewType}>{folder.name}</ItemText>
-      {viewType === 'list' && (
-        <>
-          <ItemText $viewType={viewType}>{folder.type}</ItemText>
-          <ItemText $viewType={viewType}>{folder.size}</ItemText>
-          <ItemText $viewType={viewType}>
-            {folder.updatedAt?.toLocaleDateString()}
-          </ItemText>
-        </>
-      )}
-    </ItemContainer>
+    <Link href={`/f/${folder.id}`}>
+      <Item viewType={viewType}>
+        <Folder className="folder-icon" />
+        <ItemText $viewType={viewType}>{folder.name}</ItemText>
+        {viewType === 'list' && (
+          <>
+            <ItemText $viewType={viewType}>{folder.type}</ItemText>
+            <ItemText $viewType={viewType}>{folder.size}</ItemText>
+            <ItemText $viewType={viewType}>
+              {folder.updatedAt?.toLocaleDateString()}
+            </ItemText>
+          </>
+        )}
+      </Item>
+    </Link>
   )
 }
 
 const FileItem = ({ file, viewType }: FileItemProps) => {
-  const navigateToFile = (url: string) => {
-    window.open(url, '_blank')
-  }
-
   return (
-    <ItemContainer viewType={viewType} onClick={() => navigateToFile(file.url)}>
-      <File className="file-icon" />
-      <ItemText $viewType={viewType}>{file.name}</ItemText>
-      {viewType === 'list' && (
-        <>
-          <ItemText $viewType={viewType}>{file.type}</ItemText>
-          <ItemText $viewType={viewType}>{file.size}</ItemText>
-          <ItemText $viewType={viewType}>
-            {file.updatedAt?.toLocaleDateString()}
-          </ItemText>
-        </>
-      )}
-    </ItemContainer>
+    <Link href={file.url} target="_blank" rel="noopener noreferrer">
+      <Item viewType={viewType}>
+        <File className="file-icon" />
+        <ItemText $viewType={viewType}>{file.name}</ItemText>
+        {viewType === 'list' && (
+          <>
+            <ItemText $viewType={viewType}>{file.type}</ItemText>
+            <ItemText $viewType={viewType}>{file.size}</ItemText>
+            <ItemText $viewType={viewType}>
+              {file.updatedAt?.toLocaleDateString()}
+            </ItemText>
+          </>
+        )}
+      </Item>
+    </Link>
   )
 }
 
@@ -192,7 +186,7 @@ const ContentGrid = styled.div<{ viewType: ViewType }>`
   border-radius: 8px;
 `
 
-const ItemContainer = styled.div<{ viewType: ViewType; theme: ThemeType }>`
+const Item = styled.div<{ viewType: ViewType; theme: ThemeType }>`
   display: ${(props) => (props.viewType === 'list' ? 'grid' : 'flex')};
   gap: ${(props) => (props.viewType === 'list' ? '10px' : '5px')};
   ${(props) =>
