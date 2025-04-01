@@ -70,11 +70,7 @@ export default function DriveUI(props: {
 
           {/* Breadcrumbs and actions */}
           <div className={twStyles.subHeader}>
-            <Breadcrumbs
-              currentFolderId={currentFolderId}
-              setCurrentFolderId={setCurrentFolderId}
-              props={props}
-            />
+            <Breadcrumbs props={props} />
           </div>
 
           {/* Files and folders */}

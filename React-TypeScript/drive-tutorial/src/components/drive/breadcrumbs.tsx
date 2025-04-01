@@ -7,10 +7,9 @@ import { useMemo } from 'react'
 import Link from 'next/link'
 
 const ROOT_PARENT_NAME = 'My Drive'
+const MAX_VISIBLE = 3
 
 type BreadcrumbsProps = {
-  currentFolderId: number | null
-  setCurrentFolderId: (id: number | null) => void
   props: {
     files: DbFile[]
     folders: DbFolder[]
@@ -18,38 +17,54 @@ type BreadcrumbsProps = {
   }
 }
 
-type breadcrumbProp = {
-  id: number
-  name: string
+type BreadcrumbSegment =
+  | { type: 'folder'; folder: DbFolder }
+  | { type: 'ellipsis' }
+
+function folderSegment(folder: DbFolder): BreadcrumbSegment {
+  return { type: 'folder', folder }
+}
+function ellipsisSegment(): BreadcrumbSegment {
+  return { type: 'ellipsis' }
 }
 
-export default function Breadcrumbs({
-  currentFolderId,
-  setCurrentFolderId,
-  props,
-}: BreadcrumbsProps) {
+export default function Breadcrumbs({ props }: BreadcrumbsProps) {
+  const reversedParents = [...props.parents].filter(
+    (f) => f.id !== ROOT_FOLDER_ID
+  ) // remove root
+  const showEllipsis = reversedParents.length > MAX_VISIBLE
+  const visibleSegments: BreadcrumbSegment[] = showEllipsis
+    ? [ellipsisSegment(), ...reversedParents.slice(-2).map(folderSegment)]
+    : reversedParents.map(folderSegment) // Root / ... / Other
+
   return (
     <div className={twStyles.breadcrumb}>
       <div className={twStyles.breadcrumbItem}>
         <Link href={`/f/${ROOT_FOLDER_ID}`}>{ROOT_PARENT_NAME}</Link>
-        {props.parents
-          .slice(0)
-          .reverse()
-          .map((crumb, index) => (
-            <div key={index} className={twStyles.breadcrumbItem}>
-              {index > 0 && (
-                <span className={twStyles.breadcrumbItemSeparator}>/</span>
-              )}
-              {crumb.id !== 1 && (
-                <Link
-                  className={twStyles.breadcrumbItemButton}
-                  href={`/f/${crumb.id}`}
-                >
-                  {crumb.name}
-                </Link>
-              )}
+        {visibleSegments.map((f) => {
+          if (f.type === 'ellipsis') {
+            return (
+              <span
+                key="ellipsis"
+                className="mx-2 overflow-hidden text-ellipsis text-muted-foreground"
+              >
+                ...
+              </span>
+            )
+          }
+
+          return (
+            <div key={f.folder.id} className={twStyles.breadcrumbItem}>
+              <span className={twStyles.breadcrumbItemSeparator}>/</span>
+              <Link
+                className={twStyles.breadcrumbItemButton}
+                href={`/f/${f.folder.id}`}
+              >
+                {f.folder.name}
+              </Link>
             </div>
-          ))}
+          )
+        })}
       </div>
     </div>
   )
