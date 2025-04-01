@@ -11,7 +11,7 @@
 ## EXTRA
 
 - [x] change folders to link components
-- [ ] change breadcrumbs to use links
+- [x] change breadcrumbs to use links
 - [ ] clean up the db and data fetching patterns
 - [ ] real homepage
 - [ ] url navigation
