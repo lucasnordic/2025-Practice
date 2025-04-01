@@ -1,11 +1,32 @@
 import DriveUI from '~/components/drive-ui'
+import { type DbFolder } from '~/types/drive-types'
 import { db } from '~/server/db'
 import {
   files as filesSchema,
   folders as foldersSchema,
 } from '~/server/db/schema'
 import { eq } from 'drizzle-orm'
-import { cache } from 'react'
+
+async function getAllParents(folderId: number): Promise<DbFolder[]> {
+  const parents: DbFolder[] = []
+  let currentId: number | null = folderId
+
+  while (currentId !== null) {
+    const folder = await db
+      .selectDistinct()
+      .from(foldersSchema)
+      .where(eq(foldersSchema.id, currentId))
+
+    if (!folder[0]) {
+      throw new Error('Parent folder not found')
+    }
+
+    parents.push(folder[0])
+    currentId = folder[0]?.parentId
+  }
+
+  return parents
+}
 
 export default async function DriveItemPage(props: {
   params: Promise<{ folderId: string }>
@@ -22,27 +43,29 @@ export default async function DriveItemPage(props: {
   }
 
   try {
-    const getFiles = cache(async (folderId: number) => {
-      return await db
-        .select()
-        .from(filesSchema)
-        .where(eq(filesSchema.parentId, folderId))
-        .orderBy(filesSchema.name)
-    })
-    const files = await getFiles(parsedFolderId)
+    const filesPromise = db
+      .select()
+      .from(filesSchema)
+      .where(eq(filesSchema.parentId, parsedFolderId))
+      .orderBy(filesSchema.name)
 
-    const getFolders = cache(async (folderId: number) => {
-      return await db
-        .select()
-        .from(foldersSchema)
-        .where(eq(foldersSchema.parentId, folderId))
-        .orderBy(foldersSchema.name)
-    })
-    const folders = await getFolders(parsedFolderId)
+    const foldersPromise = db
+      .select()
+      .from(foldersSchema)
+      .where(eq(foldersSchema.parentId, parsedFolderId))
+      .orderBy(foldersSchema.name)
 
-    return <DriveUI files={files} folders={folders} />
+    const parentsPromise = getAllParents(parsedFolderId)
+
+    const [folders, files, parents] = await Promise.all([
+      foldersPromise,
+      filesPromise,
+      parentsPromise,
+    ])
+
+    return <DriveUI files={files} folders={folders} parents={parents} />
   } catch (error) {
     console.error('Error loading files and folders from db', error)
-    return <DriveUI files={[]} folders={[]} />
+    return <DriveUI files={[]} folders={[]} parents={[]} />
   }
 }

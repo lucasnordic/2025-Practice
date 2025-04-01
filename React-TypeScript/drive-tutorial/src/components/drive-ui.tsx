@@ -13,6 +13,7 @@ import type { DbFile, DbFolder } from '~/types/drive-types'
 export default function DriveUI(props: {
   files: DbFile[]
   folders: DbFolder[]
+  parents: DbFolder[]
 }) {
   const [currentFolderId, setCurrentFolderId] = useState<number | null>(
     ROOT_FOLDER_ID
