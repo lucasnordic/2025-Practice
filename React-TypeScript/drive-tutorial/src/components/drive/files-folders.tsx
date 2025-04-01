@@ -20,7 +20,6 @@ type FilesFoldersProps = {
   searchQuery: string
   viewType: ViewType
   currentFolderId: number | null
-  setCurrentFolderId: (id: number | null) => void
   currentPage: number
   setCurrentPage: (page: number) => void
   props: {
@@ -36,7 +35,6 @@ type FilesFoldersProps = {
  */
 export default function FilesFolders({
   currentFolderId,
-  setCurrentFolderId,
   searchQuery,
   viewType,
   props,
@@ -88,7 +86,6 @@ export default function FilesFolders({
                 key={`folder-${item.id}`}
                 folder={item}
                 viewType={viewType}
-                setCurrentFolderId={setCurrentFolderId}
               />
             ) : (
               <FileItem
@@ -118,7 +115,6 @@ const EmptyFolderMessage = () => (
 type FolderItemProps = {
   folder: DbFolder & { type: 'folder' }
   viewType: ViewType
-  setCurrentFolderId: (id: number | null) => void
 }
 
 type FileItemProps = {
@@ -126,11 +122,7 @@ type FileItemProps = {
   viewType: ViewType
 }
 
-const FolderItem = ({
-  folder,
-  viewType,
-  setCurrentFolderId,
-}: FolderItemProps) => {
+const FolderItem = ({ folder, viewType }: FolderItemProps) => {
   return (
     <Link href={`/f/${folder.id}`}>
       <Item viewType={viewType}>

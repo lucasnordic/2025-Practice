@@ -79,7 +79,6 @@ export default function DriveUI(props: {
           {/* Files and folders */}
           <FilesFolders
             currentFolderId={currentFolderId}
-            setCurrentFolderId={setCurrentFolderId}
             searchQuery={searchQuery}
             viewType={viewType}
             currentPage={currentPage}
