@@ -15,9 +15,6 @@ export default function DriveUI(props: {
   folders: DbFolder[]
   parents: DbFolder[]
 }) {
-  const [currentFolderId, setCurrentFolderId] = useState<number | null>(
-    ROOT_FOLDER_ID
-  )
   const [viewType, setViewType] = useState<ViewType>('list')
   const [searchQuery, setSearchQuery] = useState('')
   const [clicked, setClicked] = useState(false)
@@ -75,7 +72,6 @@ export default function DriveUI(props: {
 
           {/* Files and folders */}
           <FilesFolders
-            currentFolderId={currentFolderId}
             searchQuery={searchQuery}
             viewType={viewType}
             currentPage={currentPage}

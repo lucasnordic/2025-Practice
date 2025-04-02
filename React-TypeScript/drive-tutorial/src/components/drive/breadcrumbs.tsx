@@ -1,9 +1,7 @@
 'use client'
 
-import { Button } from '~/components/ui/button'
-import { ROOT_FOLDER_ID, isRootFolder, getFolderPath } from '~/utils/drive'
+import { ROOT_FOLDER_ID } from '~/utils/drive'
 import type { DbFile, DbFolder } from '~/types/drive-types'
-import { useMemo } from 'react'
 import Link from 'next/link'
 
 const ROOT_PARENT_NAME = 'My Drive'

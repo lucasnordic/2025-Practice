@@ -19,7 +19,6 @@ export type ViewType = 'grid' | 'list'
 type FilesFoldersProps = {
   searchQuery: string
   viewType: ViewType
-  currentFolderId: number | null
   currentPage: number
   setCurrentPage: (page: number) => void
   props: {
@@ -34,18 +33,12 @@ type FilesFoldersProps = {
  * @returns
  */
 export default function FilesFolders({
-  currentFolderId,
   searchQuery,
   viewType,
   props,
 }: FilesFoldersProps) {
   // Combine and filter items
   const currentContent = useMemo(() => {
-    if (currentFolderId == null || currentFolderId === undefined) {
-      console.error('No folder ID provided')
-      return []
-    }
-
     const folders = props.folders.map((folder) => ({
       ...folder,
       type: 'folder' as const,
@@ -63,7 +56,7 @@ export default function FilesFolders({
         ? item.name.toLowerCase().includes(searchQuery.toLowerCase())
         : true
     )
-  }, [props.folders, props.files, currentFolderId, searchQuery])
+  }, [props.folders, props.files, searchQuery])
 
   return (
     <div className="flex-1 overflow-auto pb-4 pl-4 pr-4 pt-2">
