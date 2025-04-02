@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { type DbFolder } from '~/types/drive-types'
 import { db } from '~/server/db'
 import {
