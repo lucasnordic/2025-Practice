@@ -2,8 +2,8 @@ import DriveUI from '~/components/drive-ui'
 import { type DbFolder } from '~/types/drive-types'
 import { db } from '~/server/db'
 import {
-  files as filesSchema,
-  folders as foldersSchema,
+  files_table as filesSchema,
+  folders_table as foldersSchema,
 } from '~/server/db/schema'
 import { eq } from 'drizzle-orm'
 import { ROOT_FOLDER_ID } from '~/utils/drive'
