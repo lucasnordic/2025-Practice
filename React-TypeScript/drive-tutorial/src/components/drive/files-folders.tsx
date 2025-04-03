@@ -1,3 +1,10 @@
+const CURRENT_LOCALE = 'en-US'
+const DATE_OPTIONS = {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+} as const
+
 import { File, Folder } from 'lucide-react'
 import styled from 'styled-components'
 
@@ -72,7 +79,7 @@ export default function FilesFolders({
       {currentContent.length === 0 ? (
         <EmptyFolderMessage />
       ) : (
-        <ContentGrid viewType={viewType}>
+        <ContentGrid $viewType={viewType}>
           {currentContent.map((item) =>
             item.type === 'folder' ? (
               <FolderItem
@@ -118,7 +125,7 @@ type FileItemProps = {
 const FolderItem = ({ folder, viewType }: FolderItemProps) => {
   return (
     <Link href={`/f/${folder.id}`}>
-      <Item viewType={viewType}>
+      <Item $viewType={viewType}>
         <Folder className="folder-icon" />
         <ItemText $viewType={viewType}>{folder.name}</ItemText>
         {viewType === 'list' && (
@@ -126,7 +133,10 @@ const FolderItem = ({ folder, viewType }: FolderItemProps) => {
             <ItemText $viewType={viewType}>{folder.type}</ItemText>
             <ItemText $viewType={viewType}>{folder.size}</ItemText>
             <ItemText $viewType={viewType}>
-              {folder.updatedAt?.toLocaleDateString()}
+              {folder.updatedAt?.toLocaleDateString(
+                CURRENT_LOCALE,
+                DATE_OPTIONS
+              )}
             </ItemText>
           </>
         )}
@@ -138,7 +148,7 @@ const FolderItem = ({ folder, viewType }: FolderItemProps) => {
 const FileItem = ({ file, viewType }: FileItemProps) => {
   return (
     <Link href={file.url} target="_blank" rel="noopener noreferrer">
-      <Item viewType={viewType}>
+      <Item $viewType={viewType}>
         <File className="file-icon" />
         <ItemText $viewType={viewType}>{file.name}</ItemText>
         {viewType === 'list' && (
@@ -146,7 +156,7 @@ const FileItem = ({ file, viewType }: FileItemProps) => {
             <ItemText $viewType={viewType}>{file.type}</ItemText>
             <ItemText $viewType={viewType}>{file.size}</ItemText>
             <ItemText $viewType={viewType}>
-              {file.updatedAt?.toLocaleDateString()}
+              {file.updatedAt?.toLocaleDateString(CURRENT_LOCALE, DATE_OPTIONS)}
             </ItemText>
           </>
         )}
@@ -158,24 +168,24 @@ const FileItem = ({ file, viewType }: FileItemProps) => {
 /*
  * Styled Components
  */
-const ContentGrid = styled.div<{ viewType: ViewType }>`
-  display: ${(props) => (props.viewType === 'grid' ? 'grid' : 'flex')};
+const ContentGrid = styled.div<{ $viewType: ViewType }>`
+  display: ${(props) => (props.$viewType === 'grid' ? 'grid' : 'flex')};
   grid-template-columns: ${(props) =>
-    props.viewType === 'grid'
+    props.$viewType === 'grid'
       ? 'repeat(auto-fill, minmax(200px, 1fr))'
       : 'none'};
   gap: 0.18rem;
   flex-direction: ${(props) =>
-    props.viewType === 'grid' ? 'unset' : 'column'};
+    props.$viewType === 'grid' ? 'unset' : 'column'};
   /* background-color: hsl(var(--background-light)); */
   border-radius: 8px;
 `
 
-const Item = styled.div<{ viewType: ViewType; theme: ThemeType }>`
-  display: ${(props) => (props.viewType === 'list' ? 'grid' : 'flex')};
-  gap: ${(props) => (props.viewType === 'list' ? '10px' : '5px')};
+const Item = styled.div<{ $viewType: ViewType; theme: ThemeType }>`
+  display: ${(props) => (props.$viewType === 'list' ? 'grid' : 'flex')};
+  gap: ${(props) => (props.$viewType === 'list' ? '10px' : '5px')};
   ${(props) =>
-    props.viewType === 'list' &&
+    props.$viewType === 'list' &&
     `
     justify-content: space-between;
     text-align: left;
@@ -194,15 +204,15 @@ const Item = styled.div<{ viewType: ViewType; theme: ThemeType }>`
   }
 
   .folder-icon {
-    width: ${(props) => (props.viewType === 'list' ? '20px' : '40px')};
-    height: ${(props) => (props.viewType === 'list' ? '20px' : '40px')};
+    width: ${(props) => (props.$viewType === 'list' ? '20px' : '40px')};
+    height: ${(props) => (props.$viewType === 'list' ? '20px' : '40px')};
     fill: hsl(var(--accent-light-orange));
     color: hsl(var(--accent-light-orange));
   }
 
   .file-icon {
-    width: ${(props) => (props.viewType === 'list' ? '20px' : '40px')};
-    height: ${(props) => (props.viewType === 'list' ? '20px' : '40px')};
+    width: ${(props) => (props.$viewType === 'list' ? '20px' : '40px')};
+    height: ${(props) => (props.$viewType === 'list' ? '20px' : '40px')};
   }
 `
 
@@ -213,7 +223,7 @@ const ItemRow = styled.div`
   gap: 10px;
 `
 
-const ItemText = styled.a<{ $viewType: ViewType }>`
+const ItemText = styled.div<{ $viewType: ViewType }>`
   font-size: ${(props) => (props.$viewType === 'list' ? '14px' : '14px')};
   white-space: nowrap;
   overflow: hidden;
