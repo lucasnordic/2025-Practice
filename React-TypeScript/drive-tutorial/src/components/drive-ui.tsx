@@ -7,7 +7,6 @@ import Breadcrumbs from './drive/breadcrumbs'
 import FilesFolders, { type ViewType } from './drive/files-folders'
 import { ThemeProvider } from 'styled-components'
 import { theme } from '~/styles/theme'
-import { ROOT_FOLDER_ID } from '~/utils/drive'
 import type { DbFile, DbFolder } from '~/types/drive-types'
 
 export default function DriveUI(props: {

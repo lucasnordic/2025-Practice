@@ -20,7 +20,7 @@ export default async function DriveItemPage(props: {
   }
 
   try {
-    const [folders, files, parents] = await Promise.all([
+    const [files, folders, parents] = await Promise.all([
       getFiles(parsedFolderId),
       getFolders(parsedFolderId),
       getAllParentsForFolder(parsedFolderId),

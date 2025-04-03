@@ -1,9 +1,9 @@
 import type { InferSelectModel } from 'drizzle-orm'
-import { type files, type folders } from '~/server/db/schema'
+import { type files_table, type folders_table } from '~/server/db/schema'
 
 // Database types
-export type DbFile = InferSelectModel<typeof files>
-export type DbFolder = InferSelectModel<typeof folders>
+export type DbFile = InferSelectModel<typeof files_table>
+export type DbFolder = InferSelectModel<typeof folders_table>
 
 // Application types
 export type FolderId = number | null // Using number to match schema's bigint
