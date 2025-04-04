@@ -5,7 +5,7 @@ import type {
   FolderItem,
   FolderId,
 } from '../types/drive-types'
-import type { folders } from '~/server/db/schema'
+import type { folders_table as folders } from '~/server/db/schema'
 
 export const ROOT_FOLDER_ID = 1 // equal to the id of the root folder in the database
 
