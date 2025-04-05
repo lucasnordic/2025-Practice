@@ -1,9 +1,5 @@
 import DriveUI from '~/components/drive-ui'
-import {
-  getFiles,
-  getFolders,
-  getAllParentsForFolder,
-} from '~/server/db/queries'
+import { QUERIES } from '~/server/db/queries'
 
 export default async function DriveItemPage(props: {
   params: Promise<{ folderId: string }>
@@ -21,9 +17,9 @@ export default async function DriveItemPage(props: {
 
   try {
     const [files, folders, parents] = await Promise.all([
-      getFiles(parsedFolderId),
-      getFolders(parsedFolderId),
-      getAllParentsForFolder(parsedFolderId),
+      QUERIES.getFiles(parsedFolderId),
+      QUERIES.getFolders(parsedFolderId),
+      QUERIES.getAllParentsForFolder(parsedFolderId),
     ])
 
     return <DriveUI files={files} folders={folders} parents={parents} />
