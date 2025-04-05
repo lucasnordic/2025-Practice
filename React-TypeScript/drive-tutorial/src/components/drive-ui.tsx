@@ -8,6 +8,7 @@ import FilesFolders, { type ViewType } from './drive/files-folders'
 import { ThemeProvider } from 'styled-components'
 import { theme } from '~/styles/theme'
 import type { DbFile, DbFolder } from '~/types/drive-types'
+import Actions from './drive/actions'
 
 export default function DriveUI(props: {
   files: DbFile[]
@@ -67,6 +68,8 @@ export default function DriveUI(props: {
           {/* Breadcrumbs and actions */}
           <div className={twStyles.subHeader}>
             <Breadcrumbs props={props} />
+            {/* Actions */}
+            <Actions />
           </div>
 
           {/* Files and folders */}

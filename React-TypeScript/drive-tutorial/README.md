@@ -12,7 +12,7 @@
 
 - [x] change folders to link components
 - [x] change breadcrumbs to use links
-- [ ] clean up the db and data fetching patterns
+- [x] clean up the db and data fetching patterns
 - [ ] real homepage
 - [ ] url navigation
 - [ ] search is not specific to current folder

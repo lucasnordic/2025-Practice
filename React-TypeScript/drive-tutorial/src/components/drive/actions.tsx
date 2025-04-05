@@ -56,7 +56,7 @@ export default function Actions() {
 
 const twStyles = {
   container: 'ml-auto flex items-center gap-2',
-  button: 'gap-2 w-28',
+  button: 'gap-2 w-24 h-6 rounded-md',
   dropdownMenuContent: 'w-36 rounded-md p-2 shadow-md',
   dropdownMenuItem:
     'flex w-full items-center gap-2 rounded-md px-2 py-1 text-sm',

@@ -12,7 +12,15 @@ import { VIEW_OPTIONS } from '~/lib/constants'
 import styled from 'styled-components'
 import { useMemo } from 'react'
 import { debounce } from 'lodash'
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from '@clerk/nextjs'
 import Actions from './actions'
+
 // Types
 interface HeaderProps {
   clicked: boolean
@@ -76,8 +84,17 @@ export default function Header({
           setClicked={setClicked}
         />
 
-        {/* Actions */}
-        <Actions />
+        {/* Clerk Auth */}
+        <SignedOut>
+          <SignInButton>
+            <Button variant="ghost">Sign In</Button>
+          </SignInButton>
+        </SignedOut>
+        <SignedIn>
+          <div style={{ justifyContent: 'center' }}>
+            <UserButton />
+          </div>
+        </SignedIn>
       </div>
     </HeaderContainer>
   )
@@ -159,7 +176,7 @@ const twStyles = {
 
 const HeaderContainer = styled.header`
   display: grid;
-  grid-template-columns: auto 4fr 2.5rem 2.5rem 7.5rem 7.5rem;
+  grid-template-columns: auto 4fr 2.5rem 2.5rem 5rem;
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
