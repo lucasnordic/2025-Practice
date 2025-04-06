@@ -6,13 +6,10 @@
 - [x] Move folder open state to URL
 - [x] Add auth
 - [x] Add file uploading
-- [ ] Analytics
-
-## SUB-TODO
-
 - [x] upload files to the right folder
+- [x] allow upload of other files(?) that aren't images
+- [ ] Analytics
 - [ ] delete files
-- [ ] allow upload of other files(?) that aren't images
 - [ ] real homepage
 - [ ] deal with root folder
 
