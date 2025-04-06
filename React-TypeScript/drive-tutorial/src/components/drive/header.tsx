@@ -12,14 +12,7 @@ import { VIEW_OPTIONS } from '~/lib/constants'
 import styled from 'styled-components'
 import { useMemo } from 'react'
 import { debounce } from 'lodash'
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from '@clerk/nextjs'
-import Actions from './actions'
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 
 // Types
 interface HeaderProps {
