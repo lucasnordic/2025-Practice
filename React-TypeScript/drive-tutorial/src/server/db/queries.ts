@@ -7,6 +7,7 @@ import {
   folders_table as foldersSchema,
 } from '~/server/db/schema'
 import { eq } from 'drizzle-orm'
+import { ROOT_FOLDER_ID } from '~/utils/drive'
 
 export const QUERIES = {
   getAllParentsForFolder: async function (
@@ -46,5 +47,22 @@ export const QUERIES = {
       .from(foldersSchema)
       .where(eq(foldersSchema.parentId, folderId))
       .orderBy(foldersSchema.name)
+  },
+}
+
+// TODO: define another type for createfileinput?
+export const MUTATIONS = {
+  createFile: async function (input: {
+    file: {
+      name: string
+      size: number
+      url: string
+    }
+    userId: string
+  }) {
+    return await db.insert(filesSchema).values({
+      ...input.file,
+      parentId: ROOT_FOLDER_ID,
+    })
   },
 }

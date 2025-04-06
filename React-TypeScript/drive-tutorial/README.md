@@ -5,16 +5,23 @@
 - [x] Set up database and data model
 - [x] Move folder open state to URL
 - [x] Add auth
-- [ ] Add file uploading
+- [x] Add file uploading
 - [ ] Analytics
+
+## SUB-TODO
+
+- [ ] real homepage
+- [ ] upload files to the right folder
+- [ ] delete files
+- [ ] allow upload of other files(?) that aren't images
+- [ ]
 
 ## EXTRA
 
 - [x] change folders to link components
 - [x] change breadcrumbs to use links
 - [x] clean up the db and data fetching patterns
-- [ ] real homepage
-- [ ] url navigation
+- [x] url navigation
 - [ ] search is not specific to current folder
 - [ ] Hamburger menu / media query for extra buttons, darkmode, grid/list, new/upload
 - [ ] In breadcrumbs, display the deepest folder first, add '...' between My Drive and however many fits to the right

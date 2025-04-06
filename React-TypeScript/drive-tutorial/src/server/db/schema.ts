@@ -23,7 +23,7 @@ const files_table = createTable(
       .primaryKey()
       .autoincrement(),
     name: varchar('name', { length: 255 }).notNull(),
-    parentId: bigint('parentId', { mode: 'number', unsigned: true }),
+    parentId: bigint('parentId', { mode: 'number', unsigned: true }).notNull(),
     createdAt: timestamp('created_at')
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),
@@ -41,7 +41,7 @@ const folders_table = createTable(
       .primaryKey()
       .autoincrement(),
     name: varchar('name', { length: 255 }).notNull(),
-    parentId: bigint('parentId', { mode: 'number', unsigned: true }),
+    parentId: bigint('parentId', { mode: 'number', unsigned: true }).notNull(),
     createdAt: timestamp('created_at')
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),

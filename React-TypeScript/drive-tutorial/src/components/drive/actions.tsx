@@ -1,3 +1,5 @@
+'use client'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,12 +9,11 @@ import {
 import { File, Folder, Upload, Plus } from 'lucide-react'
 import { Button } from '~/components/ui/button'
 import { styled } from 'styled-components'
+import { UploadButton } from '~/components/drive/uploadthing'
+import { useRouter } from 'next/navigation'
 
 export default function Actions() {
-  const handleUpload = () => {
-    // Mock upload functionality
-    alert('Upload functionality would open a file picker here')
-  }
+  const router = useRouter()
 
   return (
     <div className={twStyles.container}>
@@ -42,21 +43,29 @@ export default function Actions() {
         </DropDownMenuContentStyled>
       </DropdownMenu>
 
-      <Button
+      {/* TODO: redo styling of button to fit + New */}
+      <UploadButton
+        endpoint="imageUploader"
+        onClientUploadComplete={() => {
+          router.refresh()
+        }}
+      />
+
+      {/* <Button
         variant="default"
         onClick={handleUpload}
         className={twStyles.button}
       >
         <Upload className="h-4 w-4" />
         Upload
-      </Button>
+      </Button> */}
     </div>
   )
 }
 
 const twStyles = {
   container: 'ml-auto flex items-center gap-2',
-  button: 'gap-2 w-24 h-6 rounded-md',
+  button: 'gap-2 w-24 rounded-md',
   dropdownMenuContent: 'w-36 rounded-md p-2 shadow-md',
   dropdownMenuItem:
     'flex w-full items-center gap-2 rounded-md px-2 py-1 text-sm',

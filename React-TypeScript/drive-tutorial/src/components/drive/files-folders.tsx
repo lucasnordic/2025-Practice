@@ -1,3 +1,5 @@
+'use client'
+
 const CURRENT_LOCALE = 'en-US'
 const DATE_OPTIONS = {
   year: 'numeric',
