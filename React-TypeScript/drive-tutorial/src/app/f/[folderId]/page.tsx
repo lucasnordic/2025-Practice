@@ -1,3 +1,4 @@
+import { auth } from '@clerk/nextjs/server'
 import DriveUI from '~/components/drive-ui'
 import { QUERIES } from '~/server/db/queries'
 
@@ -16,15 +17,35 @@ export default async function DriveItemPage(props: {
   }
 
   try {
+    const user = await auth()
+    if (!user.userId) throw new Error('Unauthorized')
+    const folder = await QUERIES.getFolderById(parsedFolderId)
+    if (!folder) throw new Error('Folder not found')
+    if (folder.ownerId !== user.userId) throw new Error('Unauthorized')
+
     const [files, folders, parents] = await Promise.all([
       QUERIES.getFiles(parsedFolderId),
       QUERIES.getFolders(parsedFolderId),
       QUERIES.getAllParentsForFolder(parsedFolderId),
     ])
 
-    return <DriveUI files={files} folders={folders} parents={parents} />
+    return (
+      <DriveUI
+        files={files}
+        folders={folders}
+        parents={parents}
+        currentFolderId={parsedFolderId}
+      />
+    )
   } catch (error) {
     console.error('Error loading files and folders from db', error)
-    return <DriveUI files={[]} folders={[]} parents={[]} />
+    return (
+      <DriveUI
+        files={[]}
+        folders={[]}
+        parents={[]}
+        currentFolderId={parsedFolderId}
+      />
+    )
   }
 }

@@ -14,6 +14,7 @@ export default function DriveUI(props: {
   files: DbFile[]
   folders: DbFolder[]
   parents: DbFolder[]
+  currentFolderId: number
 }) {
   const [viewType, setViewType] = useState<ViewType>('list')
   const [searchQuery, setSearchQuery] = useState('')
@@ -69,7 +70,7 @@ export default function DriveUI(props: {
           <div className={twStyles.subHeader}>
             <Breadcrumbs props={props} />
             {/* Actions */}
-            <Actions />
+            <Actions currentFolderId={props.currentFolderId} />
           </div>
 
           {/* Files and folders */}

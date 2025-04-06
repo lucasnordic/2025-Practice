@@ -9,7 +9,7 @@ const USE_SCAN = false
 
 export const metadata: Metadata = {
   title: 'Drive App',
-  description: 'Drive App',
+  description: 'Upload files to your drive',
   icons: [{ rel: 'icon', url: '/favicon.ico' }],
 }
 

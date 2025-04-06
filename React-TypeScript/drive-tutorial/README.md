@@ -10,11 +10,11 @@
 
 ## SUB-TODO
 
-- [ ] real homepage
-- [ ] upload files to the right folder
+- [x] upload files to the right folder
 - [ ] delete files
 - [ ] allow upload of other files(?) that aren't images
-- [ ]
+- [ ] real homepage
+- [ ] deal with root folder
 
 ## EXTRA
 

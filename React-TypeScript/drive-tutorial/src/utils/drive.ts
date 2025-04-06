@@ -7,7 +7,7 @@ import type {
 } from '../types/drive-types'
 import type { folders_table as folders } from '~/server/db/schema'
 
-export const ROOT_FOLDER_ID = 1 // equal to the id of the root folder in the database
+export const ROOT_FOLDER_ID = 1125899906842625 // equal to the id of the root folder in the database
 
 export function isFile(item: DriveItem): item is FileItem {
   return item.type === 'file'

@@ -12,7 +12,7 @@ import { styled } from 'styled-components'
 import { UploadButton } from '~/components/drive/uploadthing'
 import { useRouter } from 'next/navigation'
 
-export default function Actions() {
+export default function Actions(props: { currentFolderId: number }) {
   const router = useRouter()
 
   return (
@@ -49,6 +49,7 @@ export default function Actions() {
         onClientUploadComplete={() => {
           router.refresh()
         }}
+        input={{ folderId: props.currentFolderId }}
       />
 
       {/* <Button

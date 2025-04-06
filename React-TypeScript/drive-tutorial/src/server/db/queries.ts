@@ -7,7 +7,6 @@ import {
   folders_table as foldersSchema,
 } from '~/server/db/schema'
 import { eq } from 'drizzle-orm'
-import { ROOT_FOLDER_ID } from '~/utils/drive'
 
 export const QUERIES = {
   getAllParentsForFolder: async function (
@@ -31,6 +30,14 @@ export const QUERIES = {
     }
 
     return parents
+  },
+
+  getFolderById: async function (folderId: number) {
+    const folder = await db
+      .select()
+      .from(foldersSchema)
+      .where(eq(foldersSchema.id, folderId))
+    return folder[0]
   },
 
   getFiles: function (folderId: number): Promise<DbFile[]> {
@@ -57,12 +64,13 @@ export const MUTATIONS = {
       name: string
       size: number
       url: string
+      parentId: number
     }
     userId: string
   }) {
     return await db.insert(filesSchema).values({
       ...input.file,
-      parentId: ROOT_FOLDER_ID,
+      ownerId: input.userId,
     })
   },
 }
