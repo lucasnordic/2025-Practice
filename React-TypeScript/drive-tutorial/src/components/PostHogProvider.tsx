@@ -12,7 +12,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
     posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
       api_host: '/ingest',
       ui_host: 'https://eu.posthog.com',
-      person_profiles: 'identified_only', // 'identified_only' or 'always' to profile anonymous users
+      // person_profiles: 'identified_only', // 'identified_only' or 'always' to profile anonymous users
       capture_pageview: false, // Disable automatic pageview capture, as we capture manually
     })
   }, [])
