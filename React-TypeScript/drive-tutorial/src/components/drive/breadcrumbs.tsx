@@ -6,6 +6,7 @@ import Link from 'next/link'
 
 const ROOT_PARENT_NAME = 'My Drive'
 const MAX_VISIBLE = 3
+const DB_ROOT_NAME = 'root' // TODO: store root id of user instead
 
 type BreadcrumbsProps = {
   props: {
@@ -28,7 +29,7 @@ function ellipsisSegment(): BreadcrumbSegment {
 
 export default function Breadcrumbs({ props }: BreadcrumbsProps) {
   const reversedParents = [...props.parents].filter(
-    (f) => f.id !== ROOT_FOLDER_ID
+    (f) => f.name !== DB_ROOT_NAME
   ) // remove root
   const showEllipsis = reversedParents.length > MAX_VISIBLE
   const visibleSegments: BreadcrumbSegment[] = showEllipsis

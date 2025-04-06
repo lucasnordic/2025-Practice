@@ -9,9 +9,15 @@
 - [x] upload files to the right folder
 - [x] allow upload of other files(?) that aren't images
 - [x] Analytics
-- [ ] delete files
-- [ ] real homepage
-- [ ] deal with root folder
+- [x] real homepage
+- [ ] delete files (implemented - not working)
+- [ ] deal with root folder (state zustand?)
+- [ ] delete folders
+- [ ] create folder
+- [ ] bulletproof user access
+- [ ] file view page
+- [ ] Toast?
+- [ ] gray out to be deleted files/folders
 
 ## EXTRA
 
