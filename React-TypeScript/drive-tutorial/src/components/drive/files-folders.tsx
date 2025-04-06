@@ -7,8 +7,9 @@ const DATE_OPTIONS = {
   day: 'numeric',
 } as const
 
-import { File, Folder } from 'lucide-react'
+import { File, Folder, Trash2Icon } from 'lucide-react'
 import styled from 'styled-components'
+import { deleteFile } from '~/server/actions'
 
 import type {
   FileItem,
@@ -19,6 +20,7 @@ import type {
 import { type ThemeType } from '~/styles/theme'
 import { useMemo } from 'react'
 import Link from 'next/link'
+import { Button } from '../ui/button'
 
 /**
  * Types
@@ -140,6 +142,7 @@ const FolderItem = ({ folder, viewType }: FolderItemProps) => {
                 DATE_OPTIONS
               )}
             </ItemText>
+            <></>
           </>
         )}
       </Item>
@@ -159,6 +162,20 @@ const FileItem = ({ file, viewType }: FileItemProps) => {
             <ItemText $viewType={viewType}>{file.size}</ItemText>
             <ItemText $viewType={viewType}>
               {file.updatedAt?.toLocaleDateString(CURRENT_LOCALE, DATE_OPTIONS)}
+            </ItemText>
+            <ItemText $viewType={viewType}>
+              <Button
+                variant="ghost"
+                className="p-3"
+                aria-label="Delete file"
+                onClick={async (e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  await deleteFile(file.id)
+                }}
+              >
+                <Trash2Icon />
+              </Button>
             </ItemText>
           </>
         )}
@@ -191,7 +208,7 @@ const Item = styled.div<{ $viewType: ViewType; theme: ThemeType }>`
     `
     justify-content: space-between;
     text-align: left;
-    grid-template-columns: auto 1fr repeat(3, 0.5fr);
+    grid-template-columns: auto 1fr repeat(3, 0.5fr) 0.25fr;
   `}
   padding: 10px;
   border: 1px solid transparent;
@@ -220,7 +237,7 @@ const Item = styled.div<{ $viewType: ViewType; theme: ThemeType }>`
 
 const ItemRow = styled.div`
   display: grid;
-  grid-template-columns: 20px 1fr repeat(3, 0.5fr);
+  grid-template-columns: 20px 1fr repeat(3, 0.5fr) 0.25fr;
   padding: 10px;
   gap: 10px;
 `
