@@ -4,6 +4,7 @@ import { GeistSans } from 'geist/font/sans'
 import type { Metadata } from 'next/dist/lib/metadata/types/metadata-interface'
 import Script from 'next/script'
 import { ClerkProvider } from '@clerk/nextjs'
+import { PostHogProvider } from '~/components/PostHogProvider'
 
 const USE_SCAN = false
 
@@ -41,7 +42,9 @@ export default function RootLayout({
             />
           )}
         </head>
-        <body>{children}</body>
+        <body>
+          <PostHogProvider>{children}</PostHogProvider>
+        </body>
       </html>
     </ClerkProvider>
   )

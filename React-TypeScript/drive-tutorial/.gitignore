@@ -48,3 +48,4 @@ sandbox-for-development/
 
 # idea files
 .idea
+.env.local
