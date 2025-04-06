@@ -6,7 +6,7 @@ import {
   files_table as filesSchema,
   folders_table as foldersSchema,
 } from '~/server/db/schema'
-import { eq } from 'drizzle-orm'
+import { and, eq, isNull } from 'drizzle-orm'
 
 export const QUERIES = {
   getAllParentsForFolder: async function (
@@ -55,9 +55,22 @@ export const QUERIES = {
       .where(eq(foldersSchema.parentId, folderId))
       .orderBy(foldersSchema.name)
   },
+
+  getRootFolderForUser: async function (
+    userId: string
+  ): Promise<DbFolder | null> {
+    const folder = await db
+      .select()
+      .from(foldersSchema)
+      .where(
+        and(eq(foldersSchema.ownerId, userId), isNull(foldersSchema.parentId))
+      )
+
+    return folder[0] ?? null
+  },
 }
 
-// TODO: define another type for createfileinput?
+// TODO: define another type for createfile input?
 export const MUTATIONS = {
   createFile: async function (input: {
     file: {
@@ -72,5 +85,34 @@ export const MUTATIONS = {
       ...input.file,
       ownerId: input.userId,
     })
+  },
+
+  onboardUser: async function (userId: string) {
+    const rootFolder = await db
+      .insert(foldersSchema)
+      .values({ name: 'root', parentId: null, ownerId: userId })
+      .$returningId()
+
+    const rootFolderId = rootFolder[0]!.id
+
+    await db.insert(foldersSchema).values([
+      {
+        name: 'Recycle Bin',
+        parentId: rootFolderId,
+        ownerId: userId,
+      },
+      {
+        name: 'Documents',
+        parentId: rootFolderId,
+        ownerId: userId,
+      },
+      {
+        name: 'Shared',
+        parentId: rootFolderId,
+        ownerId: userId,
+      },
+    ])
+
+    return rootFolderId
   },
 }
