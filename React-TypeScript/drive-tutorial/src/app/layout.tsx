@@ -3,8 +3,8 @@ import '~/styles/globals.css'
 import { GeistSans } from 'geist/font/sans'
 import type { Metadata } from 'next/dist/lib/metadata/types/metadata-interface'
 import Script from 'next/script'
-import { ClerkProvider } from '@clerk/nextjs'
 import { PostHogProvider } from '~/components/PostHogProvider'
+import AuthWrapper from '~/components/wrappers/AuthWrapper'
 
 const USE_SCAN = false
 
@@ -18,21 +18,21 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <ClerkProvider>
+    <AuthWrapper>
       <html lang="en" className={GeistSans.variable}>
         <head>
           <script
-            dangerouslySetInnerHTML={{
-              __html: `
-              try {
-                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                  document.documentElement.classList.add('dark')
-                }
-              } catch (error) {
-                console.error('Error setting dark mode', error)
-              }
-            `,
-            }}
+            // dangerouslySetInnerHTML={{
+            //   __html: `
+            //   try {
+            //     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            //       document.documentElement.classList.add('dark')
+            //     }
+            //   } catch (error) {
+            //     console.error('Error setting dark mode', error)
+            //   }
+            // `,
+            // }}
           />
           {USE_SCAN && (
             <Script
@@ -46,6 +46,6 @@ export default function RootLayout({
           <PostHogProvider>{children}</PostHogProvider>
         </body>
       </html>
-    </ClerkProvider>
+    </AuthWrapper>
   )
 }
