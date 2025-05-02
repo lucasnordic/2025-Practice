@@ -1,6 +1,5 @@
 'use client'
 
-import { ROOT_FOLDER_ID } from '~/utils/drive'
 import type { DbFile, DbFolder } from '~/types/drive-types'
 import Link from 'next/link'
 
@@ -36,11 +35,16 @@ export default function Breadcrumbs({ props }: BreadcrumbsProps) {
     ? [ellipsisSegment(), ...reversedParents.slice(-2).map(folderSegment)]
     : reversedParents.map(folderSegment) // Root / ... / Other
 
+  console.log('Breadcrumbs', {
+    ...props.parents
+  })
+
   return (
     <div className={twStyles.breadcrumb}>
       <div className={twStyles.breadcrumbItem}>
-        <Link href={`/f/${ROOT_FOLDER_ID}`}>{ROOT_PARENT_NAME}</Link>
+        <Link href={`/f/${props.parents.at(0)?.id}`}>{ROOT_PARENT_NAME}</Link>
         {visibleSegments.map((f) => {
+          {/* This  */}
           if (f.type === 'ellipsis') {
             return (
               <span

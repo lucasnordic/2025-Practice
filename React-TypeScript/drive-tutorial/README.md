@@ -11,7 +11,7 @@
 - [x] Analytics
 - [x] real homepage
 - [ ] delete files (implemented - not working)
-- [ ] deal with root folder (state zustand?)
+- [x] deal with root folder
 - [ ] delete folders
 - [ ] create folder
 - [ ] bulletproof user access
@@ -25,9 +25,9 @@
 - [x] change breadcrumbs to use links
 - [x] clean up the db and data fetching patterns
 - [x] url navigation
-- [ ] search is not specific to current folder
+- [ ] search should not be specific to current folder, only
 - [ ] Hamburger menu / media query for extra buttons, darkmode, grid/list, new/upload
-- [ ] In breadcrumbs, display the deepest folder first, add '...' between My Drive and however many fits to the right
+- [x] In breadcrumbs, display the deepest folder first, add '...' between My Drive and however many fits to the right
 - [ ] Redo light mode styling
 - [ ] handle infinite scrolling - limit
 - [ ] Refactor repeatable logic into hooks or services
