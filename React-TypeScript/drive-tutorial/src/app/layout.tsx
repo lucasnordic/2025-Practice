@@ -4,7 +4,7 @@ import { GeistSans } from 'geist/font/sans'
 import type { Metadata } from 'next/dist/lib/metadata/types/metadata-interface'
 import Script from 'next/script'
 import { PostHogProvider } from '~/components/PostHogProvider'
-import AuthWrapper from '~/components/wrappers/AuthWrapper'
+import { ClerkProvider } from '@clerk/nextjs'
 
 const USE_SCAN = false
 
@@ -18,7 +18,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <AuthWrapper>
+    <ClerkProvider>
       <html lang="en" className={GeistSans.variable}>
         <head>
           <script
@@ -36,6 +36,6 @@ export default function RootLayout({
           <PostHogProvider>{children}</PostHogProvider>
         </body>
       </html>
-    </AuthWrapper>
+      </ClerkProvider>
   )
 }
