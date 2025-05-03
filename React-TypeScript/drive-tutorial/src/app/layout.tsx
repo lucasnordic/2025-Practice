@@ -33,7 +33,9 @@ export default function RootLayout({
           )}
         </head>
         <body>
-          <PostHogProvider>{children}</PostHogProvider>
+          {process.env.DEVELOPMENT ? 
+          children
+          : <PostHogProvider>{children}</PostHogProvider>}
         </body>
       </html>
       </ClerkProvider>

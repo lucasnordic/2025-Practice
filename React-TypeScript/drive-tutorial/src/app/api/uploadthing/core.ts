@@ -14,8 +14,8 @@ export const ourFileRouter = {
        * For full list of options and defaults, see the File Route API reference
        * @see https://docs.uploadthing.com/file-routes#route-config
        */
-      maxFileSize: '1GB',
-      maxFileCount: 9999,
+      maxFileSize: '16MB',
+      maxFileCount: 10,
     },
   })
     .input(z.object({ folderId: z.number() }))
@@ -23,12 +23,13 @@ export const ourFileRouter = {
     // Set permissions and file types for this FileRoute
     .middleware(async ({ input }) => {
       const user = await auth()
-
       // eslint-disable-next-line @typescript-eslint/only-throw-error
       if (!user.userId) throw new UploadThingError('Unauthorized')
+
       const folder = await QUERIES.getFolderById(input.folderId)
       // eslint-disable-next-line @typescript-eslint/only-throw-error
       if (!folder) throw new UploadThingError('Folder not found')
+        
       if (folder.ownerId !== user.userId)
         // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw new UploadThingError('Unauthorized')
