@@ -10,7 +10,7 @@
 - [x] allow upload of other files(?) that aren't images
 - [x] Analytics
 - [x] real homepage
-- [ ] delete files (implemented - not working)
+- [x] delete files (implemented - not working)
 - [x] deal with root folder
 - [ ] delete folders
 - [ ] create folder

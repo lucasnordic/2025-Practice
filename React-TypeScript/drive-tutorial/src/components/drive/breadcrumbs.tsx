@@ -35,10 +35,6 @@ export default function Breadcrumbs({ props }: BreadcrumbsProps) {
     ? [ellipsisSegment(), ...reversedParents.slice(-2).map(folderSegment)]
     : reversedParents.map(folderSegment) // Root / ... / Other
 
-  console.log('Breadcrumbs', {
-    ...props.parents
-  })
-
   return (
     <div className={twStyles.breadcrumb}>
       <div className={twStyles.breadcrumbItem}>
