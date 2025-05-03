@@ -8,7 +8,7 @@ import { UTApi } from 'uploadthing/server'
 import { cookies } from 'next/headers'
 
 const utApi = new UTApi()
-const URL = 'https://lzsl120kv7.ufs.sh'
+const URL = 'https://lzsl120kv7.ufs.sh/f/'
 
 export async function deleteFile(id: number) {
   const session = await auth()
