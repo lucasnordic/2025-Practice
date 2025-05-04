@@ -13,7 +13,7 @@
 - [x] delete files (implemented - not working)
 - [x] deal with root folder
 - [ ] delete folders
-- [ ] create folder
+- [x] create folder
 - [ ] bulletproof user access
 - [ ] file view page
 - [ ] Toast?
