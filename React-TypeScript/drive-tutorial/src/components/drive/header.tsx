@@ -78,16 +78,18 @@ export default function Header({
         />
 
         {/* Clerk Auth */}
-        <SignedOut>
-          <SignInButton>
-            <Button variant="ghost">Sign In</Button>
-          </SignInButton>
-        </SignedOut>
-        <SignedIn>
-          <div style={{ justifyContent: 'center' }}>
-            <UserButton />
-          </div>
-        </SignedIn>
+        <div className='ml-2' >
+          <SignedOut>
+            <SignInButton>
+              <Button variant="ghost">Sign In</Button>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <div style={{ justifyContent: 'center' }}>
+              <UserButton />
+            </div>
+          </SignedIn>
+        </div>
       </div>
     </HeaderContainer>
   )
@@ -164,12 +166,12 @@ function DarkModeToggle({
 const twStyles = {
   container: 'flex gap-2',
   viewToggleContainer: 'flex gap-2 ml-auto',
-  darkModeToggleContainer: 'p-3 ml-auto',
+  darkModeToggleContainer: 'pl-2.5 pr-2.5 ml-auto',
 }
 
 const HeaderContainer = styled.header`
   display: grid;
-  grid-template-columns: auto 4fr 2.5rem 2.5rem 5rem;
+  grid-template-columns: auto 4fr 2.5rem 2.5rem 2.8rem;
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
