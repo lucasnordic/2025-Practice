@@ -6,6 +6,8 @@ import { files_table, folders_table } from './db/schema'
 import { auth } from '@clerk/nextjs/server'
 import { UTApi } from 'uploadthing/server'
 import { cookies } from 'next/headers'
+import { currentUser } from '@clerk/nextjs/server'
+import { MUTATIONS } from './db/queries'
 
 const utApi = new UTApi()
 const URL = 'https://lzsl120kv7.ufs.sh/f/'
@@ -41,4 +43,21 @@ export async function deleteFile(id: number) {
   }
 
   return { success: true, message: 'File deleted successfully' }
+}
+
+export async function createFolderAction(
+  folderName: string,
+  currentFolderId: number
+) {
+  const user = await currentUser()
+  const userId = user?.id
+
+  if (!userId) {
+    throw new Error('User not logged in')
+  }
+
+  await MUTATIONS.createFolder({
+    folder: { name: folderName, parentId: currentFolderId },
+    userId,
+  })
 }
