@@ -58,6 +58,9 @@ const DialogPopupImage: React.FC<DialogPopupProps> = ({
               width={imageDimensions.width}
               height={imageDimensions.height}
               priority
+              onError={(e) => {
+                console.error('Failed to load image:', e)
+              }}
             />
           )}
           <Dialog.Description id="dialog-description">

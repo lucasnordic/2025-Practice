@@ -219,7 +219,11 @@ const FileItem = ({ file, viewType }: FileItemProps) => {
       {content}
     </DialogPopupImage>
   ) : (
-    <Link href={file.url} target="_blank" rel="noopener noreferrer">
+    <Link
+      href={file.url || '#'} // fallback for undefined file.url
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       {content}
     </Link>
   )

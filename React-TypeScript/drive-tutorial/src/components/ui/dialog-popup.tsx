@@ -53,7 +53,7 @@ const DialogPopup: React.FC<DialogPopupProps> = ({
           <fieldset className="Fieldset">
             <Input
               autoFocus
-              defaultValue={inputValue}
+              value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {

@@ -20,15 +20,14 @@ export default function Actions(props: { currentFolderId: number }) {
   const [dropdownOpen, setDropdownOpen] = React.useState(false)
 
   const handleAccept = async (folderName: string) => {
-    if (!folderName) {
-      console.error('Folder name is null')
-      return
-    } else if (folderName.trim() === '') {
+    const trimmedName = folderName.trim()
+    if (!trimmedName) {
+      console.error('Folder name is null or empty')
       return
     }
 
     try {
-      await createFolderAction(folderName, props.currentFolderId)
+      await createFolderAction(trimmedName, props.currentFolderId)
       router.refresh()
     } catch (error) {
       console.error('Error creating folder:', error)
