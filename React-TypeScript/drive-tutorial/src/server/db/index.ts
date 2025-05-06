@@ -31,4 +31,19 @@ conn.addListener('error', (err) => {
   console.error('Database connection error:', err)
 })
 
+if (process.env.DEVELOPMENT) {
+  // conn.on('enqueue', () => {
+  //   console.log('📌 Waiting for available connection slot.')
+  // })
+  // conn
+  //   .getConnection()
+  //   .then((con) => {
+  //     console.log('✅ Connection test successful')
+  //     con.release()
+  //   })
+  //   .catch((err) => {
+  //     console.error('❌ Connection test failed', err)
+  //   })
+}
+
 export const db = drizzle(conn, { schema })
