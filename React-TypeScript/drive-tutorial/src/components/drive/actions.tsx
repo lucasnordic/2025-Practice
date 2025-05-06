@@ -20,6 +20,13 @@ export default function Actions(props: { currentFolderId: number }) {
   const [dropdownOpen, setDropdownOpen] = React.useState(false)
 
   const handleAccept = async (folderName: string) => {
+    if (!folderName) {
+      console.error('Folder name is null')
+      return
+    } else if (folderName.trim() === '') {
+      return
+    }
+
     try {
       await createFolderAction(folderName, props.currentFolderId)
       router.refresh()
@@ -56,8 +63,11 @@ export default function Actions(props: { currentFolderId: number }) {
               acceptText="Create"
               cancelText="Cancel"
               inputDefaultValue="Unnamed Folder"
-              handleAccept={(folderName: string) => {
-                void handleAccept(folderName)
+              descriptionText=""
+              handleButton={(folderName: string, cancel: boolean) => {
+                if (!cancel) {
+                  void handleAccept(folderName)
+                }
                 setDropdownOpen(false)
               }}
             />

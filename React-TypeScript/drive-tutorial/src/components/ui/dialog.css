@@ -3,8 +3,13 @@
 @import '@radix-ui/colors/mauve.css';
 @import '@radix-ui/colors/violet.css';
 
+:root {
+  --dialog-max-width: 350px;
+  --dialog-max-height: 85vh;
+}
+
 .DialogOverlay {
-  background-color: var(--black-a5);
+  background-color: var(--black-a8);
   position: fixed;
   inset: 0;
   animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -18,9 +23,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90vw;
-  max-width: 350px;
-  max-height: 85vh;
+  max-width: var(--dialog-max-width);
+  max-height: var(--dialog-max-height);
   padding: 25px;
   animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }

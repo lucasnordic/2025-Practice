@@ -8,7 +8,7 @@ import './dialog.css'
 
 interface DialogPopupProps {
   // A generic callback for handling input accept
-  handleAccept: (value: string) => void
+  handleButton: (value: string, cancel: boolean) => void
   dialogTriggerName?: string
   dialogTitle?: string
   acceptText?: string
@@ -18,7 +18,7 @@ interface DialogPopupProps {
 }
 
 const DialogPopup: React.FC<DialogPopupProps> = ({
-  handleAccept,
+  handleButton,
   dialogTriggerName = 'New Item',
   dialogTitle = 'New Item',
   acceptText = 'Accept',
@@ -57,7 +57,7 @@ const DialogPopup: React.FC<DialogPopupProps> = ({
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  handleAccept(inputValue)
+                  handleButton(inputValue, false)
                   setOpen(false)
                 }
               }}
@@ -77,6 +77,10 @@ const DialogPopup: React.FC<DialogPopupProps> = ({
                 size="lg"
                 className="w-2"
                 aria-label={cancelText}
+                onClick={() => {
+                  handleButton(inputValue, true)
+                  setOpen(false)
+                }}
               >
                 {cancelText}
               </Button>
@@ -88,7 +92,7 @@ const DialogPopup: React.FC<DialogPopupProps> = ({
                 className="w-2"
                 aria-label={acceptText}
                 onClick={() => {
-                  handleAccept(inputValue)
+                  handleButton(inputValue, false)
                   setOpen(false)
                 }}
               >

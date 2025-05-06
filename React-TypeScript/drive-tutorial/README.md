@@ -2,6 +2,20 @@
 
 ## TODO
 
+- [ ] file view page
+- [ ] Toast?
+- [ ] gray out to be deleted files/folder rows
+- [ ] delete folders
+- [ ] bulletproof user access
+
+## EXTRA
+
+- [ ] search should not be specific to current folder, only
+- [ ] Redo light mode styling
+- [ ] handle infinite scrolling - limit
+
+## DONE (17/20)
+
 - [x] Set up database and data model
 - [x] Move folder open state to URL
 - [x] Add auth
@@ -12,26 +26,13 @@
 - [x] real homepage
 - [x] delete files (implemented - not working)
 - [x] deal with root folder
-- [ ] delete folders
 - [x] create folder
-- [ ] bulletproof user access
-- [ ] file view page
-- [ ] Toast?
-- [ ] gray out to be deleted files/folders
-
-## EXTRA
-
 - [x] change folders to link components
 - [x] change breadcrumbs to use links
 - [x] clean up the db and data fetching patterns
 - [x] url navigation
-- [ ] search should not be specific to current folder, only
-- [ ] Hamburger menu / media query for extra buttons, darkmode, grid/list, new/upload
-- [x] In breadcrumbs, display the deepest folder first, add '...' between My Drive and however many fits to the right
-- [ ] Redo light mode styling
-- [ ] handle infinite scrolling - limit
-- [ ] Refactor repeatable logic into hooks or services
-- [ ] Create drive-ui context
+- [x] In breadcrumbs, display the deepest folder first, add '...' between My Drive and however
+- [x] Image view page
 
 ## Using:
 

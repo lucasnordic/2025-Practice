@@ -6,6 +6,9 @@ import './src/env.js'
 
 /** @type {import("next").NextConfig} */
 const config = {
+  images: {
+    domains: ['lzsl120kv7.ufs.sh'],
+  },
   eslint: {
     ignoreDuringBuilds: false,
   },

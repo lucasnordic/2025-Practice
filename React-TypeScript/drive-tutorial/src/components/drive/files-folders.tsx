@@ -1,16 +1,14 @@
 'use client'
 
-const CURRENT_LOCALE = 'en-US'
-const DATE_OPTIONS = {
-  year: 'numeric',
-  month: 'numeric',
-  day: 'numeric',
-} as const
-
-import { File, Folder, Trash2Icon } from 'lucide-react'
+import {
+  File,
+  Folder,
+  Trash2Icon,
+  EllipsisVerticalIcon,
+  BanIcon,
+} from 'lucide-react'
 import styled from 'styled-components'
 import { deleteFile } from '~/server/actions'
-
 import type {
   FileItem,
   FolderItem,
@@ -21,6 +19,7 @@ import { type ThemeType } from '~/styles/theme'
 import { useMemo } from 'react'
 import Link from 'next/link'
 import { Button } from '../ui/button'
+import DialogPopupImage from '../ui/dialog-popup-image'
 
 /**
  * Types
@@ -37,6 +36,16 @@ type FilesFoldersProps = {
     folders: DbFolder[]
   }
 }
+
+/**
+ * Vars
+ */
+const CURRENT_LOCALE = 'en-US'
+const DATE_OPTIONS = {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+} as const
 
 /**
  * Files and Folders Component
@@ -78,6 +87,8 @@ export default function FilesFolders({
           <div className="">Type</div>
           <div className="">Size</div>
           <div className="">Modified</div>
+          {/* TODO: Make interactable/usable? */}
+          <EllipsisVerticalIcon size={24} className="pl-2" />
         </ItemRow>
       )}
       {currentContent.length === 0 ? (
@@ -141,8 +152,22 @@ const FolderItem = ({ folder, viewType }: FolderItemProps) => {
                 CURRENT_LOCALE,
                 DATE_OPTIONS
               )}
+            </ItemText>{' '}
+            <ItemText $viewType={viewType}>
+              <Button
+                variant="ghost"
+                className="p-2.5"
+                style={{ cursor: 'not-allowed' }}
+                aria-label="Delete folder and content within"
+                onClick={async (e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  // TODO: Delete folder and any files in folder
+                }}
+              >
+                <BanIcon />
+              </Button>
             </ItemText>
-            <></>
           </>
         )}
       </Item>
@@ -151,35 +176,51 @@ const FolderItem = ({ folder, viewType }: FolderItemProps) => {
 }
 
 const FileItem = ({ file, viewType }: FileItemProps) => {
-  return (
+  const isImage = /\.(jpeg|jpg|png|gif)$/i.test(file.name)
+
+  // Render the common content.
+  const content = (
+    <Item $viewType={viewType}>
+      <File className="file-icon" />
+      <ItemText $viewType={viewType}>{file.name}</ItemText>
+      {viewType === 'list' && (
+        <>
+          <ItemText $viewType={viewType}>{file.type}</ItemText>
+          <ItemText $viewType={viewType}>{file.size}</ItemText>
+          <ItemText $viewType={viewType}>
+            {file.createdAt?.toLocaleDateString(CURRENT_LOCALE, DATE_OPTIONS)}
+          </ItemText>
+          <ItemText $viewType={viewType}>
+            <Button
+              variant="ghost"
+              className="p-2.5"
+              aria-label="Delete file"
+              onClick={async (e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                await deleteFile(file.id)
+              }}
+            >
+              <Trash2Icon />
+            </Button>
+          </ItemText>
+        </>
+      )}
+    </Item>
+  )
+
+  return isImage ? (
+    <DialogPopupImage
+      dialogTriggerName={file.name}
+      dialogTitle={file.name}
+      descriptionText=""
+      file={file}
+    >
+      {content}
+    </DialogPopupImage>
+  ) : (
     <Link href={file.url} target="_blank" rel="noopener noreferrer">
-      <Item $viewType={viewType}>
-        <File className="file-icon" />
-        <ItemText $viewType={viewType}>{file.name}</ItemText>
-        {viewType === 'list' && (
-          <>
-            <ItemText $viewType={viewType}>{file.type}</ItemText>
-            <ItemText $viewType={viewType}>{file.size}</ItemText>
-            <ItemText $viewType={viewType}>
-              {file.updatedAt?.toLocaleDateString(CURRENT_LOCALE, DATE_OPTIONS)}
-            </ItemText>
-            <ItemText $viewType={viewType}>
-              <Button
-                variant="ghost"
-                className="p-3"
-                aria-label="Delete file"
-                onClick={async (e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  await deleteFile(file.id)
-                }}
-              >
-                <Trash2Icon />
-              </Button>
-            </ItemText>
-          </>
-        )}
-      </Item>
+      {content}
     </Link>
   )
 }
@@ -208,9 +249,9 @@ const Item = styled.div<{ $viewType: ViewType; theme: ThemeType }>`
     `
     justify-content: space-between;
     text-align: left;
-    grid-template-columns: auto 1fr repeat(3, 0.5fr) 0.25fr;
+    grid-template-columns: auto 1fr repeat(3, 0.5fr) 0.08fr;
   `}
-  padding: 10px;
+  padding: 5px;
   border: 1px solid transparent;
   border-radius: 4px;
   cursor: pointer;
@@ -237,8 +278,8 @@ const Item = styled.div<{ $viewType: ViewType; theme: ThemeType }>`
 
 const ItemRow = styled.div`
   display: grid;
-  grid-template-columns: 20px 1fr repeat(3, 0.5fr) 0.25fr;
-  padding: 10px;
+  grid-template-columns: 20px 1fr repeat(3, 0.5fr) 0.08fr; // dependant on Item
+  padding: 5px;
   gap: 10px;
 `
 
