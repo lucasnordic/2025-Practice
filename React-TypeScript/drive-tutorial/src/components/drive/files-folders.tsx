@@ -87,6 +87,7 @@ export default function FilesFolders({
           <div className="">Type</div>
           <div className="">Size</div>
           <div className="">Modified</div>
+          <div className="">Created</div>
           {/* TODO: Make interactable/usable? */}
           <EllipsisVerticalIcon size={24} className="pl-2" />
         </ItemRow>
@@ -154,6 +155,12 @@ const FolderItem = ({ folder, viewType }: FolderItemProps) => {
               )}
             </ItemText>{' '}
             <ItemText $viewType={viewType}>
+              {folder.createdAt?.toLocaleDateString(
+                CURRENT_LOCALE,
+                DATE_OPTIONS
+              )}
+            </ItemText>
+            <ItemText $viewType={viewType} className="no-ellipsis">
               <Button
                 variant="ghost"
                 className="p-2.5"
@@ -188,9 +195,12 @@ const FileItem = ({ file, viewType }: FileItemProps) => {
           <ItemText $viewType={viewType}>{file.type}</ItemText>
           <ItemText $viewType={viewType}>{file.size}</ItemText>
           <ItemText $viewType={viewType}>
-            {file.createdAt?.toLocaleDateString(CURRENT_LOCALE, DATE_OPTIONS)}
+            {file.updatedAt?.toLocaleDateString(CURRENT_LOCALE, DATE_OPTIONS)}
           </ItemText>
           <ItemText $viewType={viewType}>
+            {file.createdAt?.toLocaleDateString(CURRENT_LOCALE, DATE_OPTIONS)}
+          </ItemText>
+          <ItemText $viewType={viewType} className="no-ellipsis">
             <Button
               variant="ghost"
               className="p-2.5"
@@ -253,7 +263,7 @@ const Item = styled.div<{ $viewType: ViewType; theme: ThemeType }>`
     `
     justify-content: space-between;
     text-align: left;
-    grid-template-columns: auto 1fr repeat(3, 0.5fr) 0.08fr;
+    grid-template-columns: auto 1fr repeat(4, 0.5fr) 0.08fr;
   `}
   padding: 5px;
   border: 1px solid transparent;
@@ -282,7 +292,7 @@ const Item = styled.div<{ $viewType: ViewType; theme: ThemeType }>`
 
 const ItemRow = styled.div`
   display: grid;
-  grid-template-columns: 20px 1fr repeat(3, 0.5fr) 0.08fr; // dependant on Item
+  grid-template-columns: 20px 1fr repeat(4, 0.5fr) 0.08fr; // dependant on Item
   padding: 5px;
   gap: 10px;
 `
@@ -292,4 +302,10 @@ const ItemText = styled.div<{ $viewType: ViewType }>`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  &.no-ellipsis {
+    overflow: visible;
+    white-space: normal;
+    text-overflow: clip;
+  }
 `
