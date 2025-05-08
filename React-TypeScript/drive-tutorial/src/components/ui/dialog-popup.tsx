@@ -15,6 +15,9 @@ interface DialogPopupProps {
   cancelText?: string
   inputDefaultValue?: string
   descriptionText?: string
+  useTrigger?: boolean
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
 const DialogPopup: React.FC<DialogPopupProps> = ({
@@ -25,16 +28,21 @@ const DialogPopup: React.FC<DialogPopupProps> = ({
   cancelText = 'Cancel',
   inputDefaultValue = '',
   descriptionText = 'Enter a value below.',
+  open = false,
+  onOpenChange,
+  useTrigger = false,
 }) => {
-  const [open, setOpen] = React.useState(false)
   const [inputValue, setInputValue] = React.useState(inputDefaultValue)
 
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
+    <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Trigger asChild>
-        <Button variant="secondary" size="lg">
-          {dialogTriggerName}
-        </Button>
+        {/* Use button else nothing */}
+        {useTrigger ?? (
+          <Button variant="secondary" size="lg">
+            {dialogTriggerName}
+          </Button>
+        )}
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="DialogOverlay" />
@@ -58,7 +66,7 @@ const DialogPopup: React.FC<DialogPopupProps> = ({
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   handleButton(inputValue, false)
-                  setOpen(false)
+                  onOpenChange(false)
                 }
               }}
             />
@@ -79,7 +87,7 @@ const DialogPopup: React.FC<DialogPopupProps> = ({
                 aria-label={cancelText}
                 onClick={() => {
                   handleButton(inputValue, true)
-                  setOpen(false)
+                  onOpenChange(false)
                 }}
               >
                 {cancelText}
@@ -93,7 +101,7 @@ const DialogPopup: React.FC<DialogPopupProps> = ({
                 aria-label={acceptText}
                 onClick={() => {
                   handleButton(inputValue, false)
-                  setOpen(false)
+                  onOpenChange(false)
                 }}
               >
                 {acceptText}

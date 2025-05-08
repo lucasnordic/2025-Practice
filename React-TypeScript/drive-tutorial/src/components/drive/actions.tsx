@@ -18,6 +18,7 @@ import { createFolderAction } from '~/server/actions'
 export default function Actions(props: { currentFolderId: number }) {
   const router = useRouter()
   const [dropdownOpen, setDropdownOpen] = React.useState(false)
+  const [dialogOpen, setDialogOpen] = React.useState(false)
 
   const handleAccept = async (folderName: string) => {
     const trimmedName = folderName.trim()
@@ -51,28 +52,42 @@ export default function Actions(props: { currentFolderId: number }) {
           align="end"
           className={twStyles.dropdownMenuContent}
         >
-          {/* <DropDownMenuItemStyled className={twStyles.dropdownMenuItem}>
+          <DropdownMenuItemStyled
+            className={twStyles.dropdownMenuItem}
+            style={{ cursor: 'not-allowed' }}
+          >
             <Folder className="mr-2 h-4 w-4" />
+            New File
+          </DropdownMenuItemStyled>
+          <DropdownMenuItemStyled
+            className={twStyles.dropdownMenuItem}
+            onClick={() => {
+              setDropdownOpen(false)
+              setDialogOpen(true)
+            }}
+          >
+            <File className="mr-2 h-4 w-4" />
             New Folder
-          </DropDownMenuItemStyled> */}
-          <DropdownMenuItemStyled asChild>
-            <DialogPopup
-              dialogTriggerName="New Folder"
-              dialogTitle="Create New Folder"
-              acceptText="Create"
-              cancelText="Cancel"
-              inputDefaultValue="Unnamed Folder"
-              descriptionText=""
-              handleButton={(folderName: string, cancel: boolean) => {
-                if (!cancel) {
-                  void handleAccept(folderName)
-                }
-                setDropdownOpen(false)
-              }}
-            />
           </DropdownMenuItemStyled>
         </DropDownMenuContentStyled>
       </DropdownMenu>
+
+      <DialogPopup
+        dialogTriggerName="New Folder"
+        dialogTitle="Create New Folder"
+        acceptText="Create"
+        cancelText="Cancel"
+        inputDefaultValue="Unnamed Folder"
+        descriptionText=""
+        handleButton={(folderName: string, cancel: boolean) => {
+          if (!cancel) {
+            void handleAccept(folderName)
+          }
+          setDialogOpen(false)
+        }}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
 
       {/* TODO: redo styling of button to fit + New */}
       <UploadNewButton currentFolderId={props.currentFolderId} />
